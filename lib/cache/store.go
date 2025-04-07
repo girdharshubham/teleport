@@ -25,36 +25,61 @@ import (
 )
 
 // store persists cached resources directly in memory.
+<<<<<<< HEAD
 type store[T any, I comparable] struct {
 	cache   *sortcache.SortCache[T, I]
 	indexes map[I]func(T) string
+=======
+type store[T any] struct {
+	cache   *sortcache.SortCache[T]
+	indexes map[string]func(T) string
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // newStore creates a store that will index the resource
 // based on the provided indexes.
+<<<<<<< HEAD
 func newStore[T any, I comparable](indexes map[I]func(T) string) *store[T, I] {
 	return &store[T, I]{
 		indexes: indexes,
 		cache: sortcache.New(sortcache.Config[T, I]{
+=======
+func newStore[T any](indexes map[string]func(T) string) *store[T] {
+	return &store[T]{
+		indexes: indexes,
+		cache: sortcache.New(sortcache.Config[T]{
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			Indexes: indexes,
 		}),
 	}
 }
 
 // clear removes all items from the store.
+<<<<<<< HEAD
 func (s *store[T, I]) clear() error {
+=======
+func (s *store[T]) clear() error {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	s.cache.Clear()
 	return nil
 }
 
 // put adds a new item, or updates an existing item.
+<<<<<<< HEAD
 func (s *store[T, I]) put(t T) error {
+=======
+func (s *store[T]) put(t T) error {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	s.cache.Put(t)
 	return nil
 }
 
 // delete removes the provided item if any of the indexes match.
+<<<<<<< HEAD
 func (s *store[T, I]) delete(t T) error {
+=======
+func (s *store[T]) delete(t T) error {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	for idx, transform := range s.indexes {
 		s.cache.Delete(idx, transform(t))
 	}
@@ -63,7 +88,11 @@ func (s *store[T, I]) delete(t T) error {
 }
 
 // len returns the number of values currently stored.
+<<<<<<< HEAD
 func (s *store[T, I]) len() int {
+=======
+func (s *store[T]) len() int {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	return s.cache.Len()
 }
 
@@ -72,10 +101,17 @@ func (s *store[T, I]) len() int {
 //
 // It is the responsibility of the caller to clone the resource
 // before propagating it further.
+<<<<<<< HEAD
 func (s *store[T, I]) get(index I, key string) (T, error) {
 	t, ok := s.cache.Get(index, key)
 	if !ok {
 		return t, trace.NotFound("no value for key %q in index %v", key, index)
+=======
+func (s *store[T]) get(index, key string) (T, error) {
+	t, ok := s.cache.Get(index, key)
+	if !ok {
+		return t, trace.NotFound("no value for key %q in index %q", key, index)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	}
 
 	return t, nil
@@ -86,6 +122,7 @@ func (s *store[T, I]) get(index I, key string) (T, error) {
 //
 // It is the responsibility of the caller to clone the resource
 // before propagating it further.
+<<<<<<< HEAD
 func (s *store[T, I]) resources(index I, start, stop string) iter.Seq[T] {
 	return s.cache.Ascend(index, start, stop)
 }
@@ -99,3 +136,8 @@ func (s *store[T, I]) count(index I, start, stop string) int {
 
 	return n
 }
+=======
+func (s *store[T]) resources(index, start, stop string) iter.Seq[T] {
+	return s.cache.Ascend(index, start, stop)
+}
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))

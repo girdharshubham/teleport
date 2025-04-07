@@ -58,10 +58,13 @@ export function makeDatabase(json: any): Database {
     requiresRequest,
     supportsInteractive: json.supports_interactive || false,
     autoUsersEnabled: json.auto_users_enabled || false,
+<<<<<<< HEAD
     targetHealth: targetHealth && {
       status: targetHealth.status,
       error: targetHealth.transition_error,
     },
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   };
 }
 
@@ -109,7 +112,11 @@ export function makeDatabaseServer(json: any): DatabaseServer {
     targetHealth: status &&
       status.target_health && {
         status: status.target_health.status,
+<<<<<<< HEAD
         error: status.target_health.transition_error,
+=======
+        reason: status.target_health.transition_error,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
       },
   };
 }

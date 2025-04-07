@@ -133,8 +133,13 @@ test('invisible tabs still apply validation', async () => {
     />
   );
 
+<<<<<<< HEAD
   // Cause a validation error by adding a label with an empty key.
   await user.type(screen.getByPlaceholderText('label value'), 'bar');
+=======
+  // Cause a validation error by adding an empty label.
+  await user.click(screen.getByRole('button', { name: 'Add a Label' }));
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
   // Switch to a different tab.
   await user.click(getTabByName('Resources'));
@@ -144,6 +149,10 @@ test('invisible tabs still apply validation', async () => {
   // Switch back, make it valid.
   await user.click(getTabByName('Overview Invalid data'));
   await user.type(screen.getByPlaceholderText('label key'), 'foo');
+<<<<<<< HEAD
+=======
+  await user.type(screen.getByPlaceholderText('label value'), 'bar');
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   await user.click(screen.getByRole('button', { name: 'Save Changes' }));
   expect(onSave).toHaveBeenCalled();
 });
@@ -157,8 +166,13 @@ test('hidden validation errors should not propagate to tab headings', async () =
     />
   );
 
+<<<<<<< HEAD
   // Cause a validation error by adding a label with an empty key.
   await user.type(screen.getByPlaceholderText('label value'), 'bar');
+=======
+  // Cause a validation error by adding an empty label.
+  await user.click(screen.getByRole('button', { name: 'Add a Label' }));
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   await user.click(screen.getByRole('button', { name: 'Save Changes' }));
   expect(onSave).not.toHaveBeenCalled();
 
@@ -168,12 +182,16 @@ test('hidden validation errors should not propagate to tab headings', async () =
     screen.getByRole('button', { name: 'Add Teleport Resource Access' })
   );
   await user.click(screen.getByRole('menuitem', { name: 'SSH Server Access' }));
+<<<<<<< HEAD
   await user.type(
     within(getSectionByName('SSH Server Access')).getByPlaceholderText(
       'label value'
     ),
     'some-value'
   );
+=======
+  await user.click(screen.getByRole('button', { name: 'Add a Label' }));
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
   // Switch to the Admin Rules tab. Add a new section (it's invalid by
   // default).
@@ -330,11 +348,18 @@ test('tab-level validation when creating a new role', async () => {
     screen.getByRole('button', { name: 'Add Teleport Resource Access' })
   );
   await user.click(screen.getByRole('menuitem', { name: 'SSH Server Access' }));
+<<<<<<< HEAD
   await user.type(
     within(getSectionByName('SSH Server Access')).getByPlaceholderText(
       'label value'
     ),
     'bar'
+=======
+  await user.click(screen.getByRole('button', { name: 'Add a Label' }));
+  // The form should not be validating until we try to switch to the next tab.
+  expect(screen.getByPlaceholderText('label key')).toHaveAccessibleDescription(
+    ''
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   );
   // The form should not be validating until we try to switch to the next tab.
   expect(

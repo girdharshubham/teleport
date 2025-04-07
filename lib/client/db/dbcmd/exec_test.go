@@ -40,7 +40,11 @@ func TestCLICommandBuilderGetExecCommand(t *testing.T) {
 	}
 
 	conf := &client.Config{
+<<<<<<< HEAD
 		ClientStore:  client.NewFSClientStore(t.TempDir()),
+=======
+		HomePath:     t.TempDir(),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		Host:         "localhost",
 		WebProxyAddr: "proxy.example.com",
 		SiteName:     "db.example.com",

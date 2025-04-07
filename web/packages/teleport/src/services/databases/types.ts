@@ -55,6 +55,7 @@ export interface Database {
   requiresRequest?: boolean;
   supportsInteractive?: boolean;
   autoUsersEnabled?: boolean;
+<<<<<<< HEAD
   /**
    * targetHealth describes the health status of network connectivity
    * reported from an agent (db_service) that is proxying this database.
@@ -67,6 +68,8 @@ export interface Database {
    * - webapi/sites/:site/resources (unified resources)
    */
   targetHealth?: ResourceTargetHealth;
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 export type DatabasesResponse = {
@@ -122,3 +125,11 @@ export type DatabaseServer = {
   hostId: string;
   targetHealth?: ResourceTargetHealth;
 };
+<<<<<<< HEAD
+=======
+
+export type DatabaseServerResponse = {
+  items: DatabaseServer[];
+  startKey?: string;
+};
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))

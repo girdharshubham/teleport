@@ -30,6 +30,15 @@ export interface BackgroundColorProps {
 export const getBackgroundColor = (props: BackgroundColorProps) => {
   if (props.hasUnhealthyStatus) {
     return 'transparent';
+<<<<<<< HEAD
+=======
+  }
+  if (props.requiresRequest && props.pinned) {
+    return props.theme.colors.interactive.tonal.primary[0];
+  }
+  if (props.requiresRequest) {
+    return props.theme.colors.spotBackground[0];
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   }
   if (props.selected) {
     return props.theme.colors.interactive.tonal.primary[2];

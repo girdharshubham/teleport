@@ -519,7 +519,11 @@ func (bs *BotService) UpdateBot(
 				traits[t.Name] = append(traits[t.Name], t.Values...)
 			}
 			user.SetTraits(traits)
+<<<<<<< HEAD
 		case "spec.max_session_ttl":
+=======
+		case path == "spec.max_session_ttl":
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			opts := role.GetOptions()
 			opts.MaxSessionTTL = types.Duration(req.Bot.Spec.MaxSessionTtl.AsDuration())
 			role.SetOptions(opts)

@@ -24,18 +24,30 @@ import (
 	"github.com/gravitational/teleport/lib/services"
 )
 
+<<<<<<< HEAD
 type authServerIndex string
 
 const authServerNameIndex authServerIndex = "name"
 
 func newAuthServerCollection(p services.Presence, w types.WatchKind) (*collection[types.Server, authServerIndex], error) {
+=======
+const authServerStoreNameIndex = "name"
+
+func newAuthServerCollection(p services.Presence, w types.WatchKind) (*collection[types.Server], error) {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if p == nil {
 		return nil, trace.BadParameter("missing parameter Presence")
 	}
 
+<<<<<<< HEAD
 	return &collection[types.Server, authServerIndex]{
 		store: newStore(map[authServerIndex]func(types.Server) string{
 			authServerNameIndex: func(u types.Server) string {
+=======
+	return &collection[types.Server]{
+		store: newStore(map[string]func(types.Server) string{
+			authServerStoreNameIndex: func(u types.Server) string {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				return u.GetName()
 			},
 		}),
@@ -73,7 +85,11 @@ func (c *Cache) GetAuthServers() ([]types.Server, error) {
 	}
 
 	servers := make([]types.Server, 0, rg.store.len())
+<<<<<<< HEAD
 	for s := range rg.store.resources(authServerNameIndex, "", "") {
+=======
+	for s := range rg.store.resources(authServerStoreNameIndex, "", "") {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		servers = append(servers, s.DeepCopy())
 	}
 

@@ -158,7 +158,10 @@ export const MetadataSection = memo(
               Labels
             </Text>
             <LabelsInput
+<<<<<<< HEAD
               atLeastOneRow
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
               disableBtns={isProcessing}
               labels={value.labels}
               setLabels={labels => handleChange({ ...value, labels })}

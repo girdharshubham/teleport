@@ -93,8 +93,11 @@ func (c *cliPrompt) Touch(_ context.Context, keyInfo ContextualKeyInfo) error {
 // If an invalid PIN or PUK is provided, the user will be re-prompted until a
 // valid value is provided.
 func (c *cliPrompt) ChangePIN(ctx context.Context, _ ContextualKeyInfo) (*PINAndPUK, error) {
+<<<<<<< HEAD
 	fmt.Fprintf(os.Stderr, "The default PIN %q is not supported.\n", DefaultPIN)
 
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	var pinAndPUK = &PINAndPUK{}
 	for {
 		fmt.Fprintf(c.writer, "Please set a new 6-8 character PIN.\n")

@@ -40,7 +40,10 @@ export default function TopBar(props: Props) {
     alerts,
     onRemoveAlert,
     isConnected,
+<<<<<<< HEAD
     latency,
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   } = props;
   const theme = useTheme();
 
@@ -64,8 +67,12 @@ export default function TopBar(props: Props) {
 
       {isConnected && (
         <Flex px={3}>
+<<<<<<< HEAD
           <Flex alignItems="center" gap={3}>
             {latency && <LatencyDiagnostic latency={latency} />}
+=======
+          <Flex alignItems="center">
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
             <HoverTooltip
               tipContent={directorySharingToolTip(
                 canShareDirectory,
@@ -73,13 +80,21 @@ export default function TopBar(props: Props) {
               )}
               placement="bottom"
             >
+<<<<<<< HEAD
               <FolderShared style={primaryOnTrue(isSharingDirectory)} />
+=======
+              <FolderShared style={primaryOnTrue(isSharingDirectory)} pr={3} />
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
             </HoverTooltip>
             <HoverTooltip
               tipContent={clipboardSharingMessage}
               placement="bottom"
             >
+<<<<<<< HEAD
               <Clipboard style={primaryOnTrue(isSharingClipboard)} />
+=======
+              <Clipboard style={primaryOnTrue(isSharingClipboard)} pr={3} />
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
             </HoverTooltip>
             <AlertDropdown alerts={alerts} onRemoveAlert={onRemoveAlert} />
           </Flex>

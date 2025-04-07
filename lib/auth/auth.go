@@ -442,12 +442,15 @@ func NewServer(cfg *InitConfig, opts ...ServerOption) (*Server, error) {
 			return nil, trace.Wrap(err, "creating HealthCheckConfigs service")
 		}
 	}
+<<<<<<< HEAD
 	if cfg.BackendInfo == nil {
 		cfg.BackendInfo, err = local.NewBackendInfoService(cfg.Backend)
 		if err != nil {
 			return nil, trace.Wrap(err, "creating BackendInfo service")
 		}
 	}
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 	if cfg.Logger == nil {
 		cfg.Logger = slog.With(teleport.ComponentKey, teleport.ComponentAuth)
@@ -554,7 +557,10 @@ func NewServer(cfg *InitConfig, opts ...ServerOption) (*Server, error) {
 		WorkloadIdentityX509Overrides:   cfg.WorkloadIdentityX509Overrides,
 		SigstorePolicies:                cfg.SigstorePolicies,
 		HealthCheckConfig:               cfg.HealthCheckConfig,
+<<<<<<< HEAD
 		BackendInfoService:              cfg.BackendInfo,
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	}
 
 	as := Server{
@@ -791,7 +797,10 @@ type Services struct {
 	services.WorkloadIdentityX509Overrides
 	services.SigstorePolicies
 	services.HealthCheckConfig
+<<<<<<< HEAD
 	services.BackendInfoService
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // GetWebSession returns existing web session described by req.

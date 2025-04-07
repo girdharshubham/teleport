@@ -167,7 +167,10 @@ func NewDownstreamHandle(fn DownstreamCreateFunc, hello HelloGetter, opts ...Dow
 	}
 	go handle.run(fn)
 	go handle.autoEmitMetadata()
+<<<<<<< HEAD
 	go handle.autoEmitGoodbye()
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	return handle, nil
 }
 
@@ -183,7 +186,10 @@ type downstreamHandle struct {
 	metadataGetter    func(ctx context.Context) (*metadata.Metadata, error)
 	clock             clockwork.Clock
 	helloGetter       HelloGetter
+<<<<<<< HEAD
 	goodbye           atomic.Pointer[proto.UpstreamInventoryGoodbye]
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 func (h *downstreamHandle) closing() bool {
@@ -263,7 +269,11 @@ func (h *downstreamHandle) autoEmitMetadata() {
 }
 
 func (h *downstreamHandle) run(fn DownstreamCreateFunc) {
+<<<<<<< HEAD
 	retry := utils.NewDefaultLinear(h.clock)
+=======
+	retry := utils.NewDefaultLinear()
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	for {
 		h.tryRun(fn)
 

@@ -254,8 +254,14 @@ func TestTeleterm(t *testing.T) {
 func testAddingRootCluster(t *testing.T, pack *dbhelpers.DatabasePack, creds *helpers.UserCreds) {
 	t.Helper()
 
+	homeDir := t.TempDir()
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
 		ClientStore:        client.NewFSClientStore(t.TempDir()),
+=======
+		Dir:                homeDir,
+		ClientStore:        client.NewFSClientStore(homeDir),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		InsecureSkipVerify: true,
 	})
 	require.NoError(t, err)
@@ -287,6 +293,10 @@ func testListRootClustersReturnsLoggedInUser(t *testing.T, pack *dbhelpers.Datab
 	tc := mustLogin(t, pack.Root.User.GetName(), pack, creds)
 
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 	})
@@ -369,6 +379,10 @@ func testGetClusterReturnsPropertiesFromAuthServer(t *testing.T, pack *dbhelpers
 	tc := mustLogin(t, userName, pack, creds)
 
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 	})
@@ -421,6 +435,10 @@ func testHeadlessWatcher(t *testing.T, pack *dbhelpers.DatabasePack, creds *help
 	tc := mustLogin(t, pack.Root.User.GetName(), pack, creds)
 
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 	})
@@ -490,6 +508,10 @@ func testClientCache(t *testing.T, pack *dbhelpers.DatabasePack, creds *helpers.
 	storageFakeClock := clockwork.NewFakeClockAt(time.Now())
 
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		Clock:              storageFakeClock,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
@@ -751,8 +773,14 @@ func testCreateConnectMyComputerRole(t *testing.T, pack *dbhelpers.DatabasePack)
 			require.NoError(t, authServer.UpsertPassword(userName, []byte(userPassword)))
 
 			// Prepare daemon.Service.
+			homeDir := t.TempDir()
 			storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
 				ClientStore:        client.NewFSClientStore(t.TempDir()),
+=======
+				Dir:                homeDir,
+				ClientStore:        client.NewFSClientStore(homeDir),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				InsecureSkipVerify: true,
 			})
 			require.NoError(t, err)
@@ -866,6 +894,10 @@ func testCreateConnectMyComputerToken(t *testing.T, pack *dbhelpers.DatabasePack
 
 	// Prepare daemon.Service.
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 		Clock:              fakeClock,
@@ -930,6 +962,10 @@ func testWaitForConnectMyComputerNodeJoin(t *testing.T, pack *dbhelpers.Database
 	tc := mustLogin(t, pack.Root.User.GetName(), pack, creds)
 
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 	})
@@ -1014,6 +1050,10 @@ func testDeleteConnectMyComputerNode(t *testing.T, pack *dbhelpers.DatabasePack)
 	tc := mustLogin(t, userName, pack, creds)
 
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 	})
@@ -1241,6 +1281,10 @@ func testListDatabaseUsers(t *testing.T, pack *dbhelpers.DatabasePack) {
 			tc := mustLogin(t, rootUserName, pack, creds)
 
 			storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+				Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				ClientStore:        tc.ClientStore,
 				InsecureSkipVerify: tc.InsecureSkipVerify,
 			})

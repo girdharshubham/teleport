@@ -280,7 +280,11 @@ const cfg = {
     databasesPath: `/v1/webapi/sites/:clusterId/databases?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?`,
 
     databaseServer: {
+<<<<<<< HEAD
       list: `/v1/webapi/sites/:clusterId/databaseservers?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?`,
+=======
+      list: `/v1/webapi/sites/:clusterId/databaseservers?&limit=:limit?&startKey=:startKey?&query=:query?`,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
     },
 
     desktopsPath: `/v1/webapi/sites/:clusterId/desktops?searchAsRoles=:searchAsRoles?&limit=:limit?&startKey=:startKey?&query=:query?&search=:search?&sort=:sort?`,

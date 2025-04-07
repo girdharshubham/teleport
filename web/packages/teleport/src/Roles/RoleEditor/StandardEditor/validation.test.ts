@@ -165,7 +165,11 @@ describe('validateRoleEditorModel', () => {
     expect(result.isValid).toBe(false);
   });
 
+<<<<<<< HEAD
   test('invalid resources', () => {
+=======
+  test('invalid resource', () => {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
     const model = minimalRoleModel();
     model.resources = [
       {

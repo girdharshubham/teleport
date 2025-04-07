@@ -82,4 +82,17 @@ func TestIDTokenSource_GetIDToken(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, "foo", tok)
 	})
+
+	t.Run("overridden env value present", func(t *testing.T) {
+		cfg := makeConfig(
+			t,
+			"OVERRIDDEN",
+			"OVERRIDDEN",
+			"foo",
+		)
+		its := NewIDTokenSource(cfg)
+		tok, err := its.GetIDToken()
+		require.NoError(t, err)
+		require.Equal(t, "foo", tok)
+	})
 }

@@ -1209,6 +1209,389 @@ func TestRecovery(t *testing.T) {
 	require.Empty(t, cmp.Diff(ca2, out, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
 }
 
+<<<<<<< HEAD
+=======
+// TestDynamicTokens tests the dynamic tokens cache.
+func TestDynamicTokens(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	p := newPackForAuth(t)
+	t.Cleanup(p.Close)
+
+	expires := time.Now().Add(10 * time.Hour).Truncate(time.Second).UTC()
+	token, err := types.NewProvisionToken("token", types.SystemRoles{types.RoleAuth, types.RoleNode}, expires)
+	require.NoError(t, err)
+
+	err = p.provisionerS.UpsertToken(ctx, token)
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	tout, err := p.cache.GetToken(ctx, token.GetName())
+	require.NoError(t, err)
+	require.Empty(t, cmp.Diff(token, tout, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
+
+	err = p.provisionerS.DeleteToken(ctx, token.GetName())
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	_, err = p.cache.GetToken(ctx, token.GetName())
+	require.True(t, trace.IsNotFound(err))
+}
+
+func TestAuthPreference(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	p := newPackForAuth(t)
+	t.Cleanup(p.Close)
+
+	authPref, err := types.NewAuthPreferenceFromConfigFile(types.AuthPreferenceSpecV2{
+		AllowLocalAuth:  types.NewBoolOption(true),
+		MessageOfTheDay: "test MOTD",
+	})
+	require.NoError(t, err)
+	authPref, err = p.clusterConfigS.UpsertAuthPreference(ctx, authPref)
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+		require.Equal(t, types.KindClusterAuthPreference, event.Event.Resource.GetKind())
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	outAuthPref, err := p.cache.GetAuthPreference(ctx)
+	require.NoError(t, err)
+
+	require.Empty(t, cmp.Diff(outAuthPref, authPref, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
+}
+
+func TestClusterNetworkingConfig(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	p := newPackForAuth(t)
+	t.Cleanup(p.Close)
+
+	netConfig, err := types.NewClusterNetworkingConfigFromConfigFile(types.ClusterNetworkingConfigSpecV2{
+		ClientIdleTimeout:        types.Duration(time.Minute),
+		ClientIdleTimeoutMessage: "test idle timeout message",
+	})
+	require.NoError(t, err)
+	_, err = p.clusterConfigS.UpsertClusterNetworkingConfig(ctx, netConfig)
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+		require.Equal(t, types.KindClusterNetworkingConfig, event.Event.Resource.GetKind())
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	outNetConfig, err := p.cache.GetClusterNetworkingConfig(ctx)
+	require.NoError(t, err)
+
+	require.Empty(t, cmp.Diff(outNetConfig, netConfig, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
+}
+
+func TestSessionRecordingConfig(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	p := newPackForAuth(t)
+	t.Cleanup(p.Close)
+
+	recConfig, err := types.NewSessionRecordingConfigFromConfigFile(types.SessionRecordingConfigSpecV2{
+		Mode:                types.RecordAtProxySync,
+		ProxyChecksHostKeys: types.NewBoolOption(true),
+	})
+	require.NoError(t, err)
+	_, err = p.clusterConfigS.UpsertSessionRecordingConfig(ctx, recConfig)
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+		require.Equal(t, types.KindSessionRecordingConfig, event.Event.Resource.GetKind())
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	outRecConfig, err := p.cache.GetSessionRecordingConfig(ctx)
+	require.NoError(t, err)
+
+	require.Empty(t, cmp.Diff(outRecConfig, recConfig, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
+}
+
+func TestClusterAuditConfig(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	p := newPackForAuth(t)
+	t.Cleanup(p.Close)
+
+	auditConfig, err := types.NewClusterAuditConfig(types.ClusterAuditConfigSpecV2{
+		AuditEventsURI: []string{"dynamodb://audit_table_name", "file:///home/log"},
+	})
+	require.NoError(t, err)
+	err = p.clusterConfigS.SetClusterAuditConfig(ctx, auditConfig)
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+		require.Equal(t, types.KindClusterAuditConfig, event.Event.Resource.GetKind())
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	outAuditConfig, err := p.cache.GetClusterAuditConfig(ctx)
+	require.NoError(t, err)
+
+	require.Empty(t, cmp.Diff(outAuditConfig, auditConfig, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
+}
+
+func TestClusterName(t *testing.T) {
+	t.Parallel()
+	ctx := context.Background()
+
+	p := newPackForAuth(t)
+	t.Cleanup(p.Close)
+
+	clusterName, err := services.NewClusterNameWithRandomID(types.ClusterNameSpecV2{
+		ClusterName: "example.com",
+	})
+	require.NoError(t, err)
+	err = p.clusterConfigS.SetClusterName(clusterName)
+	require.NoError(t, err)
+
+	select {
+	case event := <-p.eventsC:
+		require.Equal(t, EventProcessed, event.Type)
+		require.Equal(t, types.KindClusterName, event.Event.Resource.GetKind())
+	case <-time.After(time.Second):
+		t.Fatalf("timeout waiting for event")
+	}
+
+	outName, err := p.cache.GetClusterName(ctx)
+	require.NoError(t, err)
+
+	require.Empty(t, cmp.Diff(outName, clusterName, cmpopts.IgnoreFields(types.Metadata{}, "Revision")))
+}
+
+// TestTunnelConnections tests tunnel connections caching
+func TestTunnelConnections(t *testing.T) {
+	t.Parallel()
+
+	p := newTestPack(t, ForProxy)
+	t.Cleanup(p.Close)
+
+	clusterName := "example.com"
+	testResources(t, p, testFuncs[types.TunnelConnection]{
+		newResource: func(name string) (types.TunnelConnection, error) {
+			return types.NewTunnelConnection(name, types.TunnelConnectionSpecV2{
+				ClusterName:   clusterName,
+				ProxyName:     "p1",
+				LastHeartbeat: time.Now().UTC(),
+			})
+		},
+		create: modifyNoContext(p.trustS.UpsertTunnelConnection),
+		list: func(ctx context.Context) ([]types.TunnelConnection, error) {
+			return p.trustS.GetTunnelConnections(clusterName)
+		},
+		cacheList: func(ctx context.Context) ([]types.TunnelConnection, error) {
+			return p.cache.GetTunnelConnections(clusterName)
+		},
+		update: modifyNoContext(p.trustS.UpsertTunnelConnection),
+		deleteAll: func(ctx context.Context) error {
+			return p.trustS.DeleteAllTunnelConnections()
+		},
+	})
+}
+
+// TestNodes tests nodes cache
+func TestNodes(t *testing.T) {
+	t.Parallel()
+
+	p := newTestPack(t, ForProxy)
+	t.Cleanup(p.Close)
+
+	testResources(t, p, testFuncs[types.Server]{
+		newResource: func(name string) (types.Server, error) {
+			return suite.NewServer(types.KindNode, name, "127.0.0.1:2022", apidefaults.Namespace), nil
+		},
+		create: withKeepalive(p.presenceS.UpsertNode),
+		list: func(ctx context.Context) ([]types.Server, error) {
+			return p.presenceS.GetNodes(ctx, apidefaults.Namespace)
+		},
+		cacheGet: func(ctx context.Context, name string) (types.Server, error) {
+			return p.cache.GetNode(ctx, apidefaults.Namespace, name)
+		},
+		cacheList: func(ctx context.Context) ([]types.Server, error) {
+			return p.cache.GetNodes(ctx, apidefaults.Namespace)
+		},
+		update: withKeepalive(p.presenceS.UpsertNode),
+		deleteAll: func(ctx context.Context) error {
+			return p.presenceS.DeleteAllNodes(ctx, apidefaults.Namespace)
+		},
+	})
+}
+
+// TestRemoteClusters tests remote clusters caching
+func TestRemoteClusters(t *testing.T) {
+	t.Parallel()
+
+	p := newTestPack(t, ForProxy)
+	t.Cleanup(p.Close)
+
+	testResources(t, p, testFuncs[types.RemoteCluster]{
+		newResource: func(name string) (types.RemoteCluster, error) {
+			return types.NewRemoteCluster(name)
+		},
+		create: func(ctx context.Context, rc types.RemoteCluster) error {
+			_, err := p.trustS.CreateRemoteCluster(ctx, rc)
+			return err
+		},
+		list: func(ctx context.Context) ([]types.RemoteCluster, error) {
+			return p.trustS.GetRemoteClusters(ctx)
+		},
+		cacheGet: func(ctx context.Context, name string) (types.RemoteCluster, error) {
+			return p.cache.GetRemoteCluster(ctx, name)
+		},
+		cacheList: func(ctx context.Context) ([]types.RemoteCluster, error) {
+			return p.cache.GetRemoteClusters(ctx)
+		},
+		update: func(ctx context.Context, rc types.RemoteCluster) error {
+			_, err := p.trustS.UpdateRemoteCluster(ctx, rc)
+			return err
+		},
+		deleteAll: func(ctx context.Context) error {
+			return p.trustS.DeleteAllRemoteClusters(ctx)
+		},
+	})
+}
+
+// TestKubernetes tests that CRUD operations on kubernetes clusters resources are
+// replicated from the backend to the cache.
+func TestKubernetes(t *testing.T) {
+	t.Parallel()
+
+	p := newTestPack(t, ForProxy)
+	t.Cleanup(p.Close)
+
+	testResources(t, p, testFuncs[types.KubeCluster]{
+		newResource: func(name string) (types.KubeCluster, error) {
+			return types.NewKubernetesClusterV3(types.Metadata{
+				Name: name,
+			}, types.KubernetesClusterSpecV3{})
+		},
+		create:    p.kubernetes.CreateKubernetesCluster,
+		list:      p.kubernetes.GetKubernetesClusters,
+		cacheGet:  p.cache.GetKubernetesCluster,
+		cacheList: p.cache.GetKubernetesClusters,
+		update:    p.kubernetes.UpdateKubernetesCluster,
+		deleteAll: p.kubernetes.DeleteAllKubernetesClusters,
+	})
+}
+
+// TestApplicationServers tests that CRUD operations on app servers are
+// replicated from the backend to the cache.
+func TestApplicationServers(t *testing.T) {
+	t.Parallel()
+
+	p := newTestPack(t, ForProxy)
+	t.Cleanup(p.Close)
+
+	testResources(t, p, testFuncs[types.AppServer]{
+		newResource: func(name string) (types.AppServer, error) {
+			app, err := types.NewAppV3(types.Metadata{Name: name}, types.AppSpecV3{URI: "localhost"})
+			require.NoError(t, err)
+			return types.NewAppServerV3FromApp(app, "host", uuid.New().String())
+		},
+		create: withKeepalive(p.presenceS.UpsertApplicationServer),
+		list: func(ctx context.Context) ([]types.AppServer, error) {
+			return p.presenceS.GetApplicationServers(ctx, apidefaults.Namespace)
+		},
+		cacheList: func(ctx context.Context) ([]types.AppServer, error) {
+			return p.cache.GetApplicationServers(ctx, apidefaults.Namespace)
+		},
+		update: withKeepalive(p.presenceS.UpsertApplicationServer),
+		deleteAll: func(ctx context.Context) error {
+			return p.presenceS.DeleteAllApplicationServers(ctx, apidefaults.Namespace)
+		},
+	})
+}
+
+// TestKubernetesServers tests that CRUD operations on kube servers are
+// replicated from the backend to the cache.
+func TestKubernetesServers(t *testing.T) {
+	t.Parallel()
+
+	p := newTestPack(t, ForProxy)
+	t.Cleanup(p.Close)
+
+	testResources(t, p, testFuncs[types.KubeServer]{
+		newResource: func(name string) (types.KubeServer, error) {
+			app, err := types.NewKubernetesClusterV3(types.Metadata{Name: name}, types.KubernetesClusterSpecV3{})
+			require.NoError(t, err)
+			return types.NewKubernetesServerV3FromCluster(app, "host", uuid.New().String())
+		},
+		create: withKeepalive(p.presenceS.UpsertKubernetesServer),
+		list: func(ctx context.Context) ([]types.KubeServer, error) {
+			return p.presenceS.GetKubernetesServers(ctx)
+		},
+		cacheList: func(ctx context.Context) ([]types.KubeServer, error) {
+			return p.cache.GetKubernetesServers(ctx)
+		},
+		update: withKeepalive(p.presenceS.UpsertKubernetesServer),
+		deleteAll: func(ctx context.Context) error {
+			return p.presenceS.DeleteAllKubernetesServers(ctx)
+		},
+	})
+}
+
+// TestApps tests that CRUD operations on application resources are
+// replicated from the backend to the cache.
+func TestApps(t *testing.T) {
+	t.Parallel()
+
+	p, err := newPack(t.TempDir(), ForProxy)
+	require.NoError(t, err)
+	t.Cleanup(p.Close)
+
+	testResources(t, p, testFuncs[types.Application]{
+		newResource: func(name string) (types.Application, error) {
+			return types.NewAppV3(types.Metadata{
+				Name: "foo",
+			}, types.AppSpecV3{
+				URI: "localhost",
+			})
+		},
+		create:    p.apps.CreateApp,
+		list:      p.apps.GetApps,
+		cacheGet:  p.cache.GetApp,
+		cacheList: p.cache.GetApps,
+		update:    p.apps.UpdateApp,
+		deleteAll: p.apps.DeleteAllApps,
+	})
+}
+
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 func mustCreateDatabase(t *testing.T, name, protocol, uri string) *types.DatabaseV3 {
 	database, err := types.NewDatabaseV3(
 		types.Metadata{

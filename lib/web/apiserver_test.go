@@ -9142,8 +9142,13 @@ func startKubeWithoutCleanup(ctx context.Context, t *testing.T, cfg startKubeOpt
 	require.NoError(t, err)
 
 	inventoryHandle, err := inventory.NewDownstreamHandle(client.InventoryControlStream,
+<<<<<<< HEAD
 		func(ctx context.Context) (authproto.UpstreamInventoryHello, error) {
 			return authproto.UpstreamInventoryHello{
+=======
+		func(ctx context.Context) (clientproto.UpstreamInventoryHello, error) {
+			return clientproto.UpstreamInventoryHello{
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				ServerID: hostID,
 				Version:  teleport.Version,
 				Services: []types.SystemRole{role},

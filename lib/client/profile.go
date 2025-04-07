@@ -655,8 +655,13 @@ func (p *ProfileStatus) DatabasesForCluster(clusterName string, store *Store) ([
 		Username:    p.Username,
 		ClusterName: clusterName,
 	}
+<<<<<<< HEAD
 
 	keyRing, err := store.GetKeyRing(idx, WithDBCerts{})
+=======
+	store := NewFSKeyStore(p.Dir)
+	keyRing, err := store.GetKeyRing(idx, nil /*hwks*/, WithDBCerts{})
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if err != nil {
 		return nil, trace.Wrap(err)
 	}
@@ -676,7 +681,12 @@ func (p *ProfileStatus) AppsForCluster(clusterName string, store *Store) ([]tlsc
 		ClusterName: clusterName,
 	}
 
+<<<<<<< HEAD
 	keyRing, err := store.GetKeyRing(idx, WithAppCerts{})
+=======
+	store := NewFSKeyStore(p.Dir)
+	keyRing, err := store.GetKeyRing(idx, nil /*hwks*/, WithAppCerts{})
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if err != nil {
 		return nil, trace.Wrap(err)
 	}

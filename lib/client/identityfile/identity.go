@@ -838,6 +838,20 @@ func KeyRingFromIdentityFile(identityPath, proxyHost, clusterName string) (*clie
 // This is necessary because identity files do not store the proxy address.
 // Additionally, the [clusterName] argument can ve used to target a leaf cluster
 // rather than the default root cluster.
+<<<<<<< HEAD
+=======
+func NewClientStoreFromIdentityFile(identityFile, proxyAddr, clusterName string, opts ...client.StoreConfigOpt) (*client.Store, error) {
+	clientStore := client.NewMemClientStore(opts...)
+	if err := LoadIdentityFileIntoClientStore(clientStore, identityFile, proxyAddr, clusterName); err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	return clientStore, nil
+}
+
+// LoadIdentityFileIntoClientStore loads the identityFile from the given path
+// into the given client store, assimilating it with other keys in the store.
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 func LoadIdentityFileIntoClientStore(store *client.Store, identityFile, proxyAddr, clusterName string) error {
 	if proxyAddr == "" {
 		return trace.BadParameter("missing a Proxy address when loading an Identity File.")

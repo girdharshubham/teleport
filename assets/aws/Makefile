@@ -2,7 +2,11 @@
 # This must be a _released_ version of Teleport, i.e. one which has binaries
 # available for download on https://goteleport.com/download
 # Unreleased versions will fail to build.
+<<<<<<< HEAD
 TELEPORT_VERSION ?= 17.4.8
+=======
+TELEPORT_VERSION ?= 17.4.6
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 # Teleport UID is the UID of a non-privileged 'teleport' user
 TELEPORT_UID ?= 1007

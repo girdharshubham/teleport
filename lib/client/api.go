@@ -86,6 +86,7 @@ import (
 	"github.com/gravitational/teleport/lib/devicetrust"
 	dtauthntypes "github.com/gravitational/teleport/lib/devicetrust/authn/types"
 	"github.com/gravitational/teleport/lib/events"
+	libhwk "github.com/gravitational/teleport/lib/hardwarekey"
 	"github.com/gravitational/teleport/lib/modules"
 	"github.com/gravitational/teleport/lib/multiplexer"
 	"github.com/gravitational/teleport/lib/observability/tracing"
@@ -1300,6 +1301,36 @@ func NewClient(c *Config) (tc *TeleportClient, err error) {
 		Config: *c,
 	}
 
+<<<<<<< HEAD
+=======
+	if tc.Stdout == nil {
+		tc.Stdout = os.Stdout
+	}
+	if tc.Stderr == nil {
+		tc.Stderr = os.Stderr
+	}
+	if tc.Stdin == nil {
+		tc.Stdin = os.Stdin
+	}
+
+	if tc.ClientStore == nil {
+		if tc.TLS != nil || tc.AuthMethods != nil {
+			// Client will use static auth methods instead of client store.
+			// Initialize empty client store to prevent panics.
+			tc.ClientStore = NewMemClientStore()
+		} else {
+			// TODO (Joerger): init hardware key service (and client store) earlier where it can
+			// be properly shared.
+			hardwareKeyService := libhwk.NewService(context.TODO(), nil /*prompt*/)
+			tc.ClientStore = NewFSClientStore(c.KeysDir, WithHardwareKeyService(hardwareKeyService))
+			if c.AddKeysToAgent == AddKeysToAgentOnly {
+				// Store client keys in memory, but still save trusted certs and profile to disk.
+				tc.ClientStore.KeyStore = NewMemKeyStore()
+			}
+		}
+	}
+
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	// Create a buffered channel to hold events that occurred during this session.
 	// This channel must be buffered because the SSH connection directly feeds
 	// into it. Delays in pulling messages off the global SSH request channel

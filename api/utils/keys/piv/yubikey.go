@@ -30,6 +30,10 @@ import (
 	"fmt"
 	"io"
 	"math/big"
+<<<<<<< HEAD
+=======
+	"os"
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	"strings"
 	"sync"
 	"time"
@@ -473,7 +477,14 @@ func (y *YubiKey) checkOrSetPIN(ctx context.Context, prompt hardwarekey.Prompt, 
 	}
 
 	switch pin {
+<<<<<<< HEAD
 	case piv.DefaultPIN, "":
+=======
+	case piv.DefaultPIN:
+		fmt.Fprintf(os.Stderr, "The default PIN %q is not supported.\n", piv.DefaultPIN)
+		fallthrough
+	case "":
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		pin, err = y.setPINAndPUKFromDefault(ctx, prompt, keyInfo)
 		if err != nil {
 			return trace.Wrap(err)

@@ -26,12 +26,20 @@ import (
 )
 
 // collection is responsible for managing a cached resource.
+<<<<<<< HEAD
 type collection[T any, I comparable] struct {
+=======
+type collection[T any] struct {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	// fetcher is called by fetch to retrieve and seed the
 	// store with all known resources from upstream.
 	fetcher func(ctx context.Context, loadSecrets bool) ([]T, error)
 	// store persists all resources in memory.
+<<<<<<< HEAD
 	store *store[T, I]
+=======
+	store *store[T]
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	// watch contains the kind of resource being monitored.
 	watch types.WatchKind
 	// headerTransform is used when handling delete events in [onDelete]. Since
@@ -53,7 +61,11 @@ type collection[T any, I comparable] struct {
 	singleton bool
 }
 
+<<<<<<< HEAD
 func (c collection[_, _]) watchKind() types.WatchKind {
+=======
+func (c collection[_]) watchKind() types.WatchKind {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	return c.watch
 }
 
@@ -63,7 +75,11 @@ func (c collection[_, _]) watchKind() types.WatchKind {
 // specified.
 //
 // This is a no-op if the configured filter does not return true.
+<<<<<<< HEAD
 func (c *collection[T, _]) onDelete(r types.Resource) error {
+=======
+func (c *collection[T]) onDelete(r types.Resource) error {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	switch t := r.(type) {
 	case interface{ UnwrapT() T }:
 		tt := t.UnwrapT()
@@ -98,7 +114,11 @@ func (c *collection[T, _]) onDelete(r types.Resource) error {
 // An error is returned if the resource is of an unexpected type
 //
 // This is a no-op if the configured filter does not return true.
+<<<<<<< HEAD
 func (c *collection[T, _]) onPut(r types.Resource) error {
+=======
+func (c *collection[T]) onPut(r types.Resource) error {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	switch t := r.(type) {
 	case interface{ UnwrapT() T }:
 		tt := t.UnwrapT()
@@ -121,7 +141,11 @@ func (c *collection[T, _]) onPut(r types.Resource) error {
 }
 
 // fetch populates the store with items received by the configured fetcher.
+<<<<<<< HEAD
 func (c collection[T, _]) fetch(ctx context.Context, cacheOK bool) (apply func(context.Context) error, err error) {
+=======
+func (c collection[T]) fetch(ctx context.Context, cacheOK bool) (apply func(context.Context) error, err error) {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	// Singleton objects will only get deleted or updated, not both
 	// TODO(tross|fspmarshall|espadolini) investigate if special singleton
 	// behavior can be removed.

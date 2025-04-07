@@ -34,7 +34,11 @@ export type ResourceStatus = 'healthy' | 'unhealthy' | 'unknown' | '';
 
 export type ResourceTargetHealth = {
   status: ResourceStatus;
+<<<<<<< HEAD
   error?: string;
+=======
+  reason?: string;
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 };
 
 export type UnifiedResourceApp = {

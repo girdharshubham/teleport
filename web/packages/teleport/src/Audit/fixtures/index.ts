@@ -4005,6 +4005,7 @@ export const events = [
     user: 'bob',
     user_kind: 1,
   },
+<<<<<<< HEAD
   {
     ei: 0,
     event: 'auto_update_agent_rollout.trigger',
@@ -4032,6 +4033,8 @@ export const events = [
     groups: ['prod'],
     success: true,
   },
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 ].map(makeEvent);
 
 // Do not add new events to this array, add it to `events` list.

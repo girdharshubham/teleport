@@ -85,9 +85,15 @@ require (
 	github.com/beevik/etree v1.5.1
 	github.com/buildkite/bintest/v3 v3.3.0
 	github.com/charlievieth/strcase v0.0.5
+<<<<<<< HEAD
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.5
 	github.com/charmbracelet/huh v0.7.0
+=======
+	github.com/charmbracelet/bubbles v0.20.0
+	github.com/charmbracelet/bubbletea v1.3.4
+	github.com/charmbracelet/huh v0.6.0
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/charmbracelet/lipgloss v1.1.0
 	github.com/coreos/go-oidc/v3 v3.14.1
 	github.com/coreos/go-semver v0.3.1
@@ -98,7 +104,11 @@ require (
 	github.com/digitorus/pkcs7 v0.0.0-20230818184609-3a137a874352
 	github.com/distribution/reference v0.6.0
 	github.com/docker/cli v27.5.0+incompatible
+<<<<<<< HEAD
 	github.com/docker/docker v28.1.1+incompatible
+=======
+	github.com/docker/docker v28.0.4+incompatible
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/dustin/go-humanize v1.0.1
 	github.com/elastic/go-elasticsearch/v8 v8.18.0
 	github.com/elimity-com/scim v0.0.0-20240320110924-172bf2aee9c8
@@ -134,8 +144,13 @@ require (
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/google/uuid v1.6.0
 	github.com/googleapis/gax-go/v2 v2.14.1
+<<<<<<< HEAD
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/grafana/pyroscope-go v1.2.2
+=======
+	github.com/gorilla/websocket v1.5.3
+	github.com/grafana/pyroscope-go v1.2.1
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/gravitational/license v0.0.0-20250329001817-070456fa8ec1
 	github.com/gravitational/roundtrip v1.0.2
 	github.com/gravitational/teleport/api v0.0.0
@@ -186,11 +201,19 @@ require (
 	github.com/russellhaering/goxmldsig v1.5.0
 	github.com/schollz/progressbar/v3 v3.18.0
 	github.com/scim2/filter-parser/v2 v2.2.0
+<<<<<<< HEAD
 	github.com/shirou/gopsutil/v4 v4.25.4
 	github.com/sigstore/cosign/v2 v2.5.0
 	github.com/sigstore/protobuf-specs v0.4.1
 	github.com/sigstore/sigstore v1.9.4
 	github.com/sigstore/sigstore-go v0.7.1
+=======
+	github.com/shirou/gopsutil/v4 v4.25.3
+	github.com/sigstore/cosign/v2 v2.4.3
+	github.com/sigstore/protobuf-specs v0.4.0
+	github.com/sigstore/sigstore v1.9.1
+	github.com/sigstore/sigstore-go v0.7.0
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/sijms/go-ora/v2 v2.8.24
 	github.com/snowflakedb/gosnowflake v1.14.0
 	github.com/spf13/cobra v1.9.1
@@ -200,8 +223,13 @@ require (
 	github.com/ucarion/urlpath v0.0.0-20200424170820-7ccc79b76bbb
 	github.com/vulcand/predicate v1.2.0 // replaced
 	github.com/yusufpapurcu/wmi v1.2.4
+<<<<<<< HEAD
 	github.com/zitadel/oidc/v3 v3.38.1
 	gitlab.com/gitlab-org/api/client-go v0.127.0
+=======
+	github.com/zitadel/oidc/v3 v3.37.0
+	gitlab.com/gitlab-org/api/client-go v0.126.0
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	go.etcd.io/etcd/api/v3 v3.5.21
 	go.etcd.io/etcd/client/v3 v3.5.21
 	go.mongodb.org/mongo-driver v1.14.0
@@ -239,6 +267,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gvisor.dev/gvisor v0.0.0-20230927004350-cbd86285d259
 	helm.sh/helm/v3 v3.17.3
+<<<<<<< HEAD
 	k8s.io/api v0.33.0
 	k8s.io/apiextensions-apiserver v0.33.0
 	k8s.io/apimachinery v0.33.0
@@ -246,6 +275,15 @@ require (
 	k8s.io/cli-runtime v0.33.0
 	k8s.io/client-go v0.33.0
 	k8s.io/component-base v0.33.0
+=======
+	k8s.io/api v0.32.3
+	k8s.io/apiextensions-apiserver v0.32.3
+	k8s.io/apimachinery v0.32.3
+	k8s.io/apiserver v0.32.3
+	k8s.io/cli-runtime v0.32.3
+	k8s.io/client-go v0.32.3
+	k8s.io/component-base v0.32.3
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	k8s.io/klog/v2 v2.130.1
 	k8s.io/kubectl v0.33.0
 	k8s.io/utils v0.0.0-20241210054802-24370beab758
@@ -256,7 +294,17 @@ require (
 )
 
 require (
+<<<<<<< HEAD
 	cel.dev/expr v0.20.0 // indirect
+=======
+	github.com/aws/aws-sdk-go-v2/service/cloudtrail v1.48.3
+	github.com/golang-jwt/jwt v3.2.1+incompatible
+	github.com/google/go-github/v70 v70.0.0
+)
+
+require (
+	cel.dev/expr v0.19.2 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	cloud.google.com/go v0.120.0 // indirect
 	cloud.google.com/go/auth v0.16.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
@@ -513,7 +561,11 @@ require (
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/siddontang/go-log v0.0.0-20180807004314-8d05993dda07 // indirect
 	github.com/sigstore/rekor v1.3.9 // indirect
+<<<<<<< HEAD
 	github.com/sigstore/timestamp-authority v1.2.5 // indirect
+=======
+	github.com/sigstore/timestamp-authority v1.2.4 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sony/gobreaker v0.5.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect

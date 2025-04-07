@@ -110,7 +110,12 @@ func (s *Storage) ResolveCluster(resourceURI uri.ResourceURI) (*Cluster, *client
 
 // Remove removes a cluster
 func (s *Storage) Remove(ctx context.Context, profileName string) error {
+<<<<<<< HEAD
 	return s.ClientStore.DeleteProfile(profileName)
+=======
+	profileStore := client.NewFSProfileStore(s.Dir)
+	return profileStore.DeleteProfile(profileName)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // Add adds a cluster
@@ -204,7 +209,11 @@ func (s *Storage) fromProfile(profileName, leafClusterName string) (*Cluster, *c
 	clusterURI := uri.NewClusterURI(profileName)
 
 	cfg := s.makeClientConfig()
+<<<<<<< HEAD
 	if err := cfg.LoadProfile(profileName); err != nil {
+=======
+	if err := cfg.LoadProfile(s.ClientStore, profileName); err != nil {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		return nil, nil, trace.Wrap(err)
 	}
 
@@ -265,7 +274,13 @@ func (s *Storage) loadProfileStatusAndClusterKey(clusterClient *client.TeleportC
 }
 
 func (s *Storage) makeClientConfig() *client.Config {
+<<<<<<< HEAD
 	cfg := &client.Config{}
+=======
+	cfg := client.MakeDefaultConfig()
+	cfg.HomePath = s.Dir
+	cfg.KeysDir = s.Dir
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	cfg.InsecureSkipVerify = s.InsecureSkipVerify
 	cfg.AddKeysToAgent = s.AddKeysToAgent
 	cfg.WebauthnLogin = s.WebauthnLogin

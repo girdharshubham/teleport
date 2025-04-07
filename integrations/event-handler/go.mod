@@ -181,7 +181,11 @@ require (
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
+<<<<<<< HEAD
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
+=======
+	github.com/gorilla/websocket v1.5.3 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/gosuri/uitable v0.0.4 // indirect
 	github.com/gravitational/license v0.0.0-20250329001817-070456fa8ec1 // indirect
 	github.com/gravitational/roundtrip v1.0.2 // indirect
@@ -266,10 +270,17 @@ require (
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.9.0 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
+<<<<<<< HEAD
 	github.com/sigstore/protobuf-specs v0.4.1 // indirect
 	github.com/sigstore/sigstore v1.9.4 // indirect
 	github.com/sigstore/sigstore-go v0.7.1 // indirect
 	github.com/sigstore/timestamp-authority v1.2.5 // indirect
+=======
+	github.com/sigstore/protobuf-specs v0.4.0 // indirect
+	github.com/sigstore/sigstore v1.9.1 // indirect
+	github.com/sigstore/sigstore-go v0.7.0 // indirect
+	github.com/sigstore/timestamp-authority v1.2.4 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/sijms/go-ora/v2 v2.8.24 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sony/gobreaker v0.5.0 // indirect
@@ -291,9 +302,15 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	github.com/zitadel/logging v0.6.2 // indirect
+<<<<<<< HEAD
 	github.com/zitadel/oidc/v3 v3.38.1 // indirect
 	github.com/zitadel/schema v1.3.1 // indirect
 	gitlab.com/gitlab-org/api/client-go v0.127.0 // indirect
+=======
+	github.com/zitadel/oidc/v3 v3.37.0 // indirect
+	github.com/zitadel/schema v1.3.1 // indirect
+	gitlab.com/gitlab-org/api/client-go v0.126.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.60.0 // indirect
@@ -326,6 +343,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	helm.sh/helm/v3 v3.17.3 // indirect
+<<<<<<< HEAD
 	k8s.io/api v0.33.0 // indirect
 	k8s.io/apiextensions-apiserver v0.33.0 // indirect
 	k8s.io/apimachinery v0.33.0 // indirect
@@ -333,6 +351,15 @@ require (
 	k8s.io/cli-runtime v0.33.0 // indirect
 	k8s.io/client-go v0.33.0 // indirect
 	k8s.io/component-base v0.33.0 // indirect
+=======
+	k8s.io/api v0.32.3 // indirect
+	k8s.io/apiextensions-apiserver v0.32.3 // indirect
+	k8s.io/apimachinery v0.32.3 // indirect
+	k8s.io/apiserver v0.32.3 // indirect
+	k8s.io/cli-runtime v0.32.3 // indirect
+	k8s.io/client-go v0.32.3 // indirect
+	k8s.io/component-base v0.32.3 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20250318190949-c8a335a9a2ff // indirect
 	k8s.io/kubectl v0.33.0 // indirect

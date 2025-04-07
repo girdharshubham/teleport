@@ -314,6 +314,7 @@ type Database struct {
 	// AutoUsersEnabled is a flag to indicate the database has user auto
 	// provisioning enabled
 	AutoUsersEnabled bool `json:"auto_users_enabled,omitempty"`
+<<<<<<< HEAD
 	// TargetHealth describes the health status of network connectivity
 	// reported from an agent (db_service) that is proxying this database.
 	//
@@ -324,6 +325,8 @@ type Database struct {
 	// - webapi/sites/:site/databases/:database (singular)
 	// - webapi/sites/:site/resources (unified resources)
 	TargetHealth types.TargetHealth `json:"targetHealth,omitempty"`
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // AWS contains AWS specific fields.

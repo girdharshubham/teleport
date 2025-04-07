@@ -1231,8 +1231,13 @@ func NewFakeTeleportVersion() *FakeTeleportVersion {
 }
 
 // GetTeleportVersion returns current Teleport version.
+<<<<<<< HEAD
 func (s FakeTeleportVersion) GetTeleportVersion(_ context.Context) (semver.Version, error) {
 	return *teleport.SemVer(), nil
+=======
+func (s FakeTeleportVersion) GetTeleportVersion(_ context.Context) (*semver.Version, error) {
+	return teleport.SemVer(), nil
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // WriteTeleportVersion stub function for writing.

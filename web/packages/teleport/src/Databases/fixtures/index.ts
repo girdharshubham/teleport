@@ -31,7 +31,13 @@ export const databases: Database[] = [
     ],
     hostname: 'aurora-hostname',
     targetHealth: { status: 'unhealthy' },
+<<<<<<< HEAD
   },
+=======
+    // TODO(kimlisa): remove as any once we add
+    // "targetHealth" field to db response
+  } as any,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   {
     kind: 'db',
     name: 'mongodbizzle',
@@ -44,7 +50,13 @@ export const databases: Database[] = [
     ],
     hostname: 'mongo-bongo',
     targetHealth: { status: 'unknown' },
+<<<<<<< HEAD
   },
+=======
+    // TODO(kimlisa): remove as any once we add
+    // "targetHealth" field to db response
+  } as any,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   {
     kind: 'db',
     name: 'Dynamooooo',
@@ -105,7 +117,13 @@ export const databases: Database[] = [
     ],
     hostname: 'postgres-hostname',
     targetHealth: { status: 'unhealthy' },
+<<<<<<< HEAD
   },
+=======
+    // TODO(kimlisa): remove as any once we add
+    // "targetHealth" field to db response
+  } as any,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   {
     kind: 'db',
     name: 'mysql-aurora-56',

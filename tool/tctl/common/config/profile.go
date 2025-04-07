@@ -49,8 +49,14 @@ func LoadConfigFromProfile(ccf *GlobalCLIFlags, cfg *servicecfg.Config) (*authcl
 	hwks := libhwk.NewService(ctx, nil /*prompt*/)
 	clientStore := client.NewFSClientStore(cfg.TeleportHome, client.WithHardwareKeyService(hwks))
 	if ccf.IdentityFilePath != "" {
+<<<<<<< HEAD
 		clientStore = client.NewMemClientStore(client.WithHardwareKeyService(hwks))
 		if err := identityfile.LoadIdentityFileIntoClientStore(clientStore, ccf.IdentityFilePath, proxyAddr, ""); err != nil {
+=======
+		var err error
+		clientStore, err = identityfile.NewClientStoreFromIdentityFile(ccf.IdentityFilePath, proxyAddr, "", client.WithHardwareKeyService(hwks))
+		if err != nil {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			return nil, trace.Wrap(err)
 		}
 	}

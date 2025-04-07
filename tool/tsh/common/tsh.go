@@ -607,6 +607,7 @@ type CLIConf struct {
 	OutputDir string
 	// Confirm determines whether to provide a y/N confirmation prompt.
 	Confirm bool
+<<<<<<< HEAD
 
 	// clientStore is the client identity storage interface. This store must be initialized once
 	// and only once in order to ensure key (and hardware key) storage is synced across the process.
@@ -618,6 +619,8 @@ type CLIConf struct {
 	// atomic here is overkill as the CLIConf is generally consumed sequentially. However, occasionally
 	// we need concurrency safety, such as for [forEachProfileParallel].
 	clientStoreSet int32
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // Stdout returns the stdout writer.
@@ -4668,6 +4671,7 @@ func setEnvVariables(c *client.Config, options Options) {
 	}
 }
 
+<<<<<<< HEAD
 // setClientStore sets the client store. If the client store was already set,
 // it returns an error instead, so this should not be used after initClientStore.
 func (c *CLIConf) setClientStore(store *client.Store) error {
@@ -4677,6 +4681,24 @@ func (c *CLIConf) setClientStore(store *client.Store) error {
 	c.clientStore = store
 	return nil
 }
+=======
+func initClientStore(cf *CLIConf, proxy string) (*client.Store, error) {
+	var hwks hardwarekey.Service
+	if cf.disableHardwareKeyAgentClient {
+		hwks = piv.NewYubiKeyService(nil /*prompt*/)
+	} else {
+		hwks = libhwk.NewService(cf.Context, nil /*prompt*/)
+	}
+
+	switch {
+	case cf.IdentityFileIn != "":
+		// Import identity file keys to in-memory client store.
+		clientStore, err := identityfile.NewClientStoreFromIdentityFile(cf.IdentityFileIn, proxy, cf.SiteName, client.WithHardwareKeyService(hwks))
+		if err != nil {
+			return nil, trace.Wrap(err)
+		}
+		return clientStore, nil
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 // getClientStore gets the client store, initializing it if needed. This should be
 // preferred over using clientStore directly in cases where it might not be initialized.
@@ -4705,10 +4727,15 @@ func (c *CLIConf) initClientStore() {
 	case c.IdentityFileIn != "", c.IdentityFileOut != "", c.AuthConnector == constants.HeadlessConnector:
 		// Store client keys in memory, where they can be exported to non-standard
 		// FS formats (e.g. identity file) or used for a single client call in memory.
+<<<<<<< HEAD
 		c.clientStore = client.NewMemClientStore(client.WithHardwareKeyService(hwks))
+=======
+		return client.NewMemClientStore(client.WithHardwareKeyService(hwks)), nil
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 	case c.AddKeysToAgent == client.AddKeysToAgentOnly:
 		// Store client keys in memory, but save trusted certs and profile to disk.
+<<<<<<< HEAD
 		c.clientStore = client.NewFSClientStore(c.HomePath, client.WithHardwareKeyService(hwks))
 		c.clientStore.KeyStore = client.NewMemKeyStore()
 
@@ -4723,6 +4750,14 @@ func (c *CLIConf) initClientStore() {
 		if err := identityfile.LoadIdentityFileIntoClientStore(c.clientStore, c.IdentityFileIn, c.Proxy, c.SiteName); err == nil {
 			logger.DebugContext(c.Context, "failed to load identity file into client store", "err", err)
 		}
+=======
+		clientStore := client.NewFSClientStore(cf.HomePath, client.WithHardwareKeyService(hwks))
+		clientStore.KeyStore = client.NewMemKeyStore()
+		return clientStore, nil
+
+	default:
+		return client.NewFSClientStore(cf.HomePath, client.WithHardwareKeyService(hwks)), nil
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	}
 }
 

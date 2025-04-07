@@ -4800,9 +4800,12 @@ message OneOf {
     events.SigstorePolicyCreate SigstorePolicyCreate = 210;
     events.SigstorePolicyUpdate SigstorePolicyUpdate = 211;
     events.SigstorePolicyDelete SigstorePolicyDelete = 212;
+<<<<<<< HEAD
     events.AutoUpdateAgentRolloutTrigger AutoUpdateAgentRolloutTrigger = 213;
     events.AutoUpdateAgentRolloutForceDone AutoUpdateAgentRolloutForceDone = 214;
     events.AutoUpdateAgentRolloutRollback AutoUpdateAgentRolloutRollback = 215;
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   }
 }
 

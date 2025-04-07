@@ -14,7 +14,11 @@ require (
 	github.com/stretchr/testify v1.10.0
 	github.com/waigani/diffparser v0.0.0-20190828052634-7391f219313d
 	golang.org/x/mod v0.24.0
+<<<<<<< HEAD
 	golang.org/x/oauth2 v0.29.0
+=======
+	golang.org/x/oauth2 v0.28.0
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	helm.sh/helm/v3 v3.17.3
 	howett.net/plist v1.0.1
 	k8s.io/apiextensions-apiserver v0.33.0

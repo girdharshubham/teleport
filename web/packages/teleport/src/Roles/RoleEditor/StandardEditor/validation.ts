@@ -42,9 +42,13 @@ import {
   ResourceKindOption,
   RoleEditorModel,
   RuleModel,
+<<<<<<< HEAD
   ServerAccess,
   VerbModel,
   WindowsDesktopAccess,
+=======
+  VerbModel,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 } from './standardmodel';
 
 export const kubernetesClusterWideResourceKinds: KubernetesResourceKind[] = [
@@ -450,9 +454,13 @@ const requiredVerbs = (message: string) => (verbs: VerbModel[]) => () => {
 };
 
 const adminRuleValidationRules = {
+<<<<<<< HEAD
   resources: requiredField<ResourceKindOption>(
     'At least one resource kind is required'
   ),
+=======
+  resources: requiredField('At least one resource kind is required'),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   verbs: requiredVerbs('At least one permission is required'),
 };
 export type AdminRuleValidationResult = RuleSetValidationResult<

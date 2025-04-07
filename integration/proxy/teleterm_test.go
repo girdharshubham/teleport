@@ -241,6 +241,10 @@ func testGatewayCertRenewal(ctx context.Context, t *testing.T, params gatewayCer
 
 	fakeClock := clockwork.NewFakeClockAt(time.Now())
 	storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+		Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		ClientStore:        tc.ClientStore,
 		InsecureSkipVerify: tc.InsecureSkipVerify,
 		// Inject a fake clock into clusters.Storage so we can control when the middleware thinks the
@@ -878,6 +882,10 @@ func testTeletermAppGatewayTargetPortValidation(t *testing.T, pack *appaccess.Pa
 		require.NoError(t, err)
 
 		storage, err := clusters.NewStorage(clusters.Config{
+<<<<<<< HEAD
+=======
+			Dir:                tc.KeysDir,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			ClientStore:        tc.ClientStore,
 			InsecureSkipVerify: tc.InsecureSkipVerify,
 		})

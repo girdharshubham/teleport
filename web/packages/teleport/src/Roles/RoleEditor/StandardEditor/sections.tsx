@@ -16,7 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+<<<<<<< HEAD
 import { Fragment, PropsWithChildren, useEffect, useId, useState } from 'react';
+=======
+import { Fragment, PropsWithChildren, useEffect, useState } from 'react';
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 import styled, { useTheme } from 'styled-components';
 
 import Box, { BoxProps } from 'design/Box';
@@ -102,7 +106,10 @@ export const SectionBox = ({
     expansionState === ExpansionState.Collapsed ? 'Collapse' : 'Expand';
   const validator = useValidation();
   const [contentHeight, setContentHeight] = useState(0);
+<<<<<<< HEAD
   const helperTextId = useId();
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
   // Points to the content element whose height will be observed for setting
   // target height of the expand animation.

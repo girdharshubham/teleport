@@ -30,7 +30,11 @@ import type {
   CreateDatabaseRequest,
   Database,
   DatabaseIamPolicyResponse,
+<<<<<<< HEAD
   DatabaseServer,
+=======
+  DatabaseServerResponse,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   DatabaseServicesResponse,
   UpdateDatabaseRequest,
 } from './types';
@@ -104,7 +108,11 @@ export function fetchDatabaseServers({
   clusterId: string;
   params: UrlResourcesParams;
   signal?: AbortSignal;
+<<<<<<< HEAD
 }): Promise<ResourcesResponse<DatabaseServer>> {
+=======
+}): Promise<DatabaseServerResponse | void> {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   return (
     api
       .get(cfg.getDatabaseServerUrl(clusterId, params), signal)
@@ -112,7 +120,11 @@ export function fetchDatabaseServers({
         const items = json?.items || [];
 
         return {
+<<<<<<< HEAD
           agents: items.map(makeDatabaseServer),
+=======
+          items: items.map(makeDatabaseServer),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
           startKey: json?.startKey,
         };
       })

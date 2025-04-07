@@ -44,8 +44,12 @@ export function RoleEditorVisualizer({
   const ctx = useTeleport();
   const version = ctx.storeUser.state.cluster.authVersion;
   const canUpdateAccessGraphSettings =
+<<<<<<< HEAD
     ctx.storeUser.state.acl.accessGraphSettings.edit &&
     cfg.entitlements.AccessGraphDemoMode.enabled;
+=======
+    ctx.storeUser.state.acl.accessGraphSettings.edit;
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   // the demo banner should show every time they load the role editor
   const [demoDismissed, setDemoDismissed] = useState(false);
   if (roleDiffProps && shouldShowRoleDiff(roleDiffProps)) {

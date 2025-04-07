@@ -367,12 +367,15 @@ type InitConfig struct {
 
 	// HealthCheckConfig manages health check config resources.
 	HealthCheckConfig services.HealthCheckConfig
+<<<<<<< HEAD
 
 	// BackendInfo is a service of backend information.
 	BackendInfo services.BackendInfoService
 
 	// SkipVersionCheck skips version check during major version upgrade/downgrade.
 	SkipVersionCheck bool
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // Init instantiates and configures an instance of AuthServer
@@ -420,6 +423,7 @@ func initCluster(ctx context.Context, cfg InitConfig, asrv *Server) error {
 	if err != nil {
 		return trace.Wrap(err)
 	}
+<<<<<<< HEAD
 
 	if cfg.SkipVersionCheck {
 		if err := upsertTeleportVersion(ctx, cfg.VersionStorage, asrv.Services.BackendInfoService, *teleport.SemVer()); err != nil {
@@ -429,6 +433,10 @@ func initCluster(ctx context.Context, cfg InitConfig, asrv *Server) error {
 		if err := validateAndUpdateTeleportVersion(ctx, cfg.VersionStorage, asrv.Services.BackendInfoService, *teleport.SemVer()); err != nil {
 			return trace.Wrap(err)
 		}
+=======
+	if err := validateAndUpdateTeleportVersion(ctx, cfg.VersionStorage, teleport.SemVer()); err != nil {
+		return trace.Wrap(err)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	}
 
 	// if bootstrap resources are supplied, use them to bootstrap backend state

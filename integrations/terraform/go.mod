@@ -127,7 +127,12 @@ require (
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/containerd/platforms v0.2.1 // indirect
 	github.com/containerd/stargz-snapshotter/estargz v0.16.3 // indirect
+<<<<<<< HEAD
 	github.com/coreos/go-oidc/v3 v3.14.1 // indirect
+=======
+	github.com/coreos/go-oidc v2.2.1+incompatible // indirect
+	github.com/coreos/go-oidc/v3 v3.13.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd/v22 v22.5.0 // indirect
 	github.com/crewjam/httperr v0.2.0 // indirect
@@ -171,14 +176,22 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-openapi/analysis v0.23.0 // indirect
+<<<<<<< HEAD
 	github.com/go-openapi/errors v0.22.1 // indirect
+=======
+	github.com/go-openapi/errors v0.22.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect
 	github.com/go-openapi/loads v0.22.0 // indirect
 	github.com/go-openapi/runtime v0.28.0 // indirect
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-openapi/strfmt v0.23.0 // indirect
+<<<<<<< HEAD
 	github.com/go-openapi/swag v0.23.1 // indirect
+=======
+	github.com/go-openapi/swag v0.23.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/go-openapi/validate v0.24.0 // indirect
 	github.com/go-piv/piv-go v1.11.0 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
@@ -212,7 +225,11 @@ require (
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
+<<<<<<< HEAD
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
+=======
+	github.com/gorilla/websocket v1.5.3 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/gosuri/uitable v0.0.4 // indirect
 	github.com/gravitational/license v0.0.0-20250329001817-070456fa8ec1 // indirect
 	github.com/gravitational/roundtrip v1.0.2 // indirect
@@ -243,7 +260,11 @@ require (
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/hashicorp/yamux v0.0.0-20181012175058-2f1d1f20f75d // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
+<<<<<<< HEAD
 	github.com/in-toto/attestation v1.1.1 // indirect
+=======
+	github.com/in-toto/attestation v1.1.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/in-toto/in-toto-golang v0.9.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -279,7 +300,12 @@ require (
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
+<<<<<<< HEAD
 	github.com/mailru/easyjson v0.9.0 // indirect
+=======
+	github.com/magiconair/properties v1.8.9 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/mattermost/xml-roundtrip-validator v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -311,7 +337,11 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
+<<<<<<< HEAD
 	github.com/oracle/oci-go-sdk/v65 v65.89.3 // indirect
+=======
+	github.com/oracle/oci-go-sdk/v65 v65.88.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/patrickmn/go-cache v2.1.1-0.20191004192108-46f407853014+incompatible // indirect
 	github.com/pavlo-v-chernykh/keystore-go/v4 v4.5.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
@@ -336,12 +366,18 @@ require (
 	github.com/russellhaering/gosaml2 v0.10.0 // indirect
 	github.com/russellhaering/goxmldsig v1.5.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+<<<<<<< HEAD
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
+=======
+	github.com/sagikazarmark/locafero v0.4.0 // indirect
+	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/sassoftware/relic v7.2.1+incompatible // indirect
 	github.com/schollz/progressbar/v3 v3.18.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.9.0 // indirect
 	github.com/shibumi/go-pathspec v1.3.0 // indirect
+<<<<<<< HEAD
 	github.com/shirou/gopsutil/v4 v4.25.4 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/sigstore/protobuf-specs v0.4.1 // indirect
@@ -349,15 +385,32 @@ require (
 	github.com/sigstore/sigstore v1.9.4 // indirect
 	github.com/sigstore/sigstore-go v0.7.1 // indirect
 	github.com/sigstore/timestamp-authority v1.2.5 // indirect
+=======
+	github.com/shirou/gopsutil/v4 v4.25.3 // indirect
+	github.com/shopspring/decimal v1.4.0 // indirect
+	github.com/sigstore/protobuf-specs v0.4.0 // indirect
+	github.com/sigstore/rekor v1.3.9 // indirect
+	github.com/sigstore/sigstore v1.9.1 // indirect
+	github.com/sigstore/sigstore-go v0.7.0 // indirect
+	github.com/sigstore/timestamp-authority v1.2.4 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/sijms/go-ora/v2 v2.8.24 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sony/gobreaker v0.5.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
+<<<<<<< HEAD
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/spf13/cobra v1.9.1 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/spf13/viper v1.20.1 // indirect
+=======
+	github.com/spf13/afero v1.11.0 // indirect
+	github.com/spf13/cast v1.7.0 // indirect
+	github.com/spf13/cobra v1.9.1 // indirect
+	github.com/spf13/pflag v1.0.6 // indirect
+	github.com/spf13/viper v1.19.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	github.com/spiffe/aws-spiffe-workload-helper v0.0.1-rc.8 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
@@ -387,9 +440,15 @@ require (
 	github.com/zclconf/go-cty v1.14.4 // indirect
 	github.com/zeebo/errs v1.4.0 // indirect
 	github.com/zitadel/logging v0.6.2 // indirect
+<<<<<<< HEAD
 	github.com/zitadel/oidc/v3 v3.38.1 // indirect
 	github.com/zitadel/schema v1.3.1 // indirect
 	gitlab.com/gitlab-org/api/client-go v0.127.0 // indirect
+=======
+	github.com/zitadel/oidc/v3 v3.37.0 // indirect
+	github.com/zitadel/schema v1.3.1 // indirect
+	gitlab.com/gitlab-org/api/client-go v0.126.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	go.abhg.dev/goldmark/frontmatter v0.2.0 // indirect
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
@@ -406,7 +465,11 @@ require (
 	go.uber.org/mock v0.5.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
+<<<<<<< HEAD
 	golang.org/x/crypto v0.37.0 // indirect
+=======
+	golang.org/x/crypto v0.36.0 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/net v0.39.0 // indirect
@@ -430,6 +493,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	helm.sh/helm/v3 v3.17.3 // indirect
+<<<<<<< HEAD
 	k8s.io/api v0.33.0 // indirect
 	k8s.io/apiextensions-apiserver v0.33.0 // indirect
 	k8s.io/apimachinery v0.33.0 // indirect
@@ -437,6 +501,15 @@ require (
 	k8s.io/cli-runtime v0.33.0 // indirect
 	k8s.io/client-go v0.33.0 // indirect
 	k8s.io/component-base v0.33.0 // indirect
+=======
+	k8s.io/api v0.32.3 // indirect
+	k8s.io/apiextensions-apiserver v0.32.3 // indirect
+	k8s.io/apimachinery v0.32.3 // indirect
+	k8s.io/apiserver v0.32.3 // indirect
+	k8s.io/cli-runtime v0.32.3 // indirect
+	k8s.io/client-go v0.32.3 // indirect
+	k8s.io/component-base v0.32.3 // indirect
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	k8s.io/klog/v2 v2.130.1 // indirect
 	k8s.io/kube-openapi v0.0.0-20250318190949-c8a335a9a2ff // indirect
 	k8s.io/kubectl v0.33.0 // indirect

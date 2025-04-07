@@ -227,7 +227,11 @@ function VerbEditor({
   onVerbChange(verb: Verb, checked: boolean): void;
   onAllVerbsChange(checked: boolean): void;
 }) {
+<<<<<<< HEAD
   const helperTextId = useId();
+=======
+  const id = useId();
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   const { valid, message } = useRule(rule(verbs));
 
   // Hardcoded column works here because the editor is fixed-width (defined in
@@ -239,7 +243,11 @@ function VerbEditor({
     : 3;
 
   return (
+<<<<<<< HEAD
     <PermissionsFieldset aria-describedby={helperTextId}>
+=======
+    <PermissionsFieldset id={id}>
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
       <Legend>
         <LabelContent required>Permissions</LabelContent>
       </Legend>
@@ -263,7 +271,11 @@ function VerbEditor({
       </PermissionsGrid>
       <HelperTextLine
         hasError={!valid}
+<<<<<<< HEAD
         helperTextId={helperTextId}
+=======
+        helperTextId={id}
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
         errorMessage={message}
       />
     </PermissionsFieldset>

@@ -86,6 +86,10 @@ test('basic editing', async () => {
   await user.clear(screen.getByLabelText('Role Name *'));
   await user.type(screen.getByLabelText('Role Name *'), 'some-name');
   await user.type(screen.getByLabelText('Description'), 'some-description');
+<<<<<<< HEAD
+=======
+  await user.click(screen.getByRole('button', { name: 'Add a Label' }));
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   await user.type(screen.getByPlaceholderText('label key'), 'foo');
   await user.type(screen.getByPlaceholderText('label value'), 'bar');
   await selectEvent.select(screen.getByLabelText('Version'), 'v6');
@@ -102,7 +106,11 @@ test('basic validation', async () => {
   const user = userEvent.setup();
   const { validator } = setup();
   await user.clear(screen.getByLabelText('Role Name *'));
+<<<<<<< HEAD
   await user.type(screen.getByPlaceholderText('label value'), 'some-value');
+=======
+  await user.click(screen.getByRole('button', { name: 'Add a Label' }));
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   act(() => validator.validate());
 
   expect(screen.getByLabelText('Role Name *')).toHaveAccessibleDescription(

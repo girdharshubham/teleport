@@ -99,7 +99,10 @@ test('Preview Identity Security button displays for cloud users with entitlement
 
 test('Preview Identity Security button does not show if user does not have update ACL', async () => {
   cfg.isCloud = true;
+<<<<<<< HEAD
   cfg.entitlements.AccessGraphDemoMode = { enabled: true, limit: 0 };
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
   const ctx = createTeleportContext({
     customAcl: { ...getAcl(), accessGraphSettings: noAccess },
   });

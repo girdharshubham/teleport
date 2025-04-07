@@ -1226,6 +1226,16 @@ func TestGoodbye(t *testing.T) {
 			// Test setup: wait for the downstream handler to finish its startup and respond to its hello
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
+<<<<<<< HEAD
+=======
+			handle, err := NewDownstreamHandle(func(ctx context.Context) (client.DownstreamInventoryControlStream, error) {
+				return downstream, nil
+			}, func(ctx context.Context) (proto.UpstreamInventoryHello, error) { return upstreamHello, nil })
+			require.NoError(t, err)
+			// downstream handler is closed later in the test, no need to defer the cleanup
+
+			// Wait for upstream hello.
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			select {
 			case msg := <-upstream.Recv():
 				require.Equal(t, upstreamHello, msg)

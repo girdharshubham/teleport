@@ -839,6 +839,7 @@ func TestResourceNames(t *testing.T) {
 
 	require.Equal(t, expectedNames, slices.Collect(ResourceNames(apps)))
 }
+<<<<<<< HEAD
 
 func newAppServer(t *testing.T, name string) AppServer {
 	t.Helper()
@@ -861,3 +862,5 @@ func newAppServer(t *testing.T, name string) AppServer {
 	require.NoError(t, err)
 	return app
 }
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))

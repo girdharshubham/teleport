@@ -257,11 +257,14 @@ func (s *WorkloadIdentityAWSRAService) renderAWSCreds(
 	)
 	defer span.End()
 
+<<<<<<< HEAD
 	expiresAt, err := time.Parse(time.RFC3339, creds.Expiration)
 	if err != nil {
 		return fmt.Errorf("parsing expiration time: %w", err)
 	}
 
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	artifactName := cmp.Or(s.cfg.ArtifactName, "aws_credentials")
 
 	f := ini.Empty()

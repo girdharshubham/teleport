@@ -4,7 +4,11 @@
 
 # Sync with devbox.json.
 GOLANG_VERSION ?= go1.24.2
+<<<<<<< HEAD
 GOLANGCI_LINT_VERSION ?= v2.1.5
+=======
+GOLANGCI_LINT_VERSION ?= v1.64.7
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 # NOTE: Remember to update engines.node in package.json to match the major version.
 NODE_VERSION ?= 22.14.0

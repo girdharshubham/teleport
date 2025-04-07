@@ -42,7 +42,11 @@ func TestResourceStore(t *testing.T) {
 	require.Equal(t, 0, zero)
 
 	n, err := store.get("numbers", "1000")
+<<<<<<< HEAD
 	require.ErrorIs(t, err, &trace.NotFoundError{Message: `no value for key "1000" in index numbers`})
+=======
+	require.ErrorIs(t, err, &trace.NotFoundError{Message: `no value for key "1000" in index "numbers"`})
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	require.Equal(t, 0, n)
 
 	v, err := store.get("characters", "1c")
@@ -57,12 +61,20 @@ func TestResourceStore(t *testing.T) {
 
 	require.NoError(t, store.delete(0))
 	_, err = store.get("numbers", "0")
+<<<<<<< HEAD
 	require.ErrorIs(t, err, &trace.NotFoundError{Message: `no value for key "0" in index numbers`})
+=======
+	require.ErrorIs(t, err, &trace.NotFoundError{Message: `no value for key "0" in index "numbers"`})
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 	require.NoError(t, store.clear())
 
 	_, err = store.get("numbers", "0")
+<<<<<<< HEAD
 	require.ErrorIs(t, err, &trace.NotFoundError{Message: `no value for key "0" in index numbers`})
+=======
+	require.ErrorIs(t, err, &trace.NotFoundError{Message: `no value for key "0" in index "numbers"`})
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 	require.Zero(t, store.len())
 }

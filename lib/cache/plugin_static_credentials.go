@@ -65,12 +65,18 @@ func (c *Cache) GetPluginStaticCredentials(ctx context.Context, name string) (ty
 	ctx, span := c.Tracer.Start(ctx, "cache/GetPluginStaticCredentials")
 	defer span.End()
 
+<<<<<<< HEAD
 	getter := genericGetter[types.PluginStaticCredentials, pluginStaticCredentialsIndex]{
 		cache:       c,
 		collection:  c.collections.pluginStaticCredentials,
 		index:       pluginStaticCredentialsNameIndex,
 		upstreamGet: c.Config.PluginStaticCredentials.GetPluginStaticCredentials,
 		clone:       types.PluginStaticCredentials.Clone,
+=======
+	rg, err := readLegacyCollectionCache(c, c.legacyCacheCollections.pluginStaticCredentials)
+	if err != nil {
+		return nil, trace.Wrap(err)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	}
 	out, err := getter.get(ctx, name)
 	return out, trace.Wrap(err)
@@ -80,7 +86,11 @@ func (c *Cache) GetPluginStaticCredentialsByLabels(ctx context.Context, labels m
 	ctx, span := c.Tracer.Start(ctx, "cache/GetPluginStaticCredentialsByLabels")
 	defer span.End()
 
+<<<<<<< HEAD
 	rg, err := acquireReadGuard(c, c.collections.pluginStaticCredentials)
+=======
+	rg, err := readLegacyCollectionCache(c, c.legacyCacheCollections.pluginStaticCredentials)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if err != nil {
 		return nil, trace.Wrap(err)
 	}

@@ -21,6 +21,11 @@ import (
 
 	"github.com/gravitational/trace"
 
+<<<<<<< HEAD
+=======
+	"github.com/gravitational/teleport/api/profile"
+	"github.com/gravitational/teleport/api/types"
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	vnetv1 "github.com/gravitational/teleport/gen/proto/go/teleport/lib/vnet/v1"
 )
 

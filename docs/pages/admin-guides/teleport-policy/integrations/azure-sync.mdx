@@ -65,7 +65,11 @@ how to set up Access Graph.
   Discovery Service within your cluster.
 </Admonition>
 
+<<<<<<< HEAD
 ## Step 1/4. Install the Discovery Service
+=======
+### Installing the Discovery Service
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 <Admonition type="tip">
   If you plan on running the Discovery Service on a host that is already running
@@ -80,7 +84,11 @@ via Entra ID integration.
 
 (!docs/pages/includes/install-linux.mdx!)
 
+<<<<<<< HEAD
 ## Step 2/4. Configure the Discovery Service
+=======
+### Configuring the Discovery Service
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 To activate the Teleport Discovery Service, add a top level discovery_service section to the `teleport.yaml`
 config file. This service monitors dynamic `discovery_config` resources that are set up
@@ -112,7 +120,11 @@ discovery_service:
 
 The Discovery Service will now periodically fetch resources from your Azure subscription.
 
+<<<<<<< HEAD
 ## Step 3/4. Activate the Discovery Service
+=======
+### Activating the Discovery Service
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 To activate the Discovery Service for fetching Azure resources, you'll need to authorize the identity running the
 Discovery service. Two options for authorization are available.
@@ -139,8 +151,12 @@ Discovery service. Two options for authorization are available.
       Use the application object ID as the principal ID in step 2 of the integration command.
     </Admonition>
 
+<<<<<<< HEAD
     Lastly, add the name of the <Var name="azure-integration" /> to the configuration, typically this is `entra-id`:
 
+=======
+    Lastly, add the name of the <Var name="integration" /> to the configuration, typically this is `entra-id`:
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
     ```yaml
     discovery_service:
       access_graph:
@@ -152,7 +168,11 @@ Discovery service. Two options for authorization are available.
   </TabItem>
 </Tabs>
 
+<<<<<<< HEAD
 ## Step 4/4. Set up Access Graph Azure Sync
+=======
+## Step 2/2. Set up Access Graph Azure Sync
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 To configure the Teleport Discovery Service, the Azure managed identity running the Discovery Service within
 Azure must be given the right permissions to fetch Azure resources. Within the

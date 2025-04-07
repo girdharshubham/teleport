@@ -583,6 +583,7 @@ func (p *ProxyLine) ResolveSource() net.Addr {
 		return &p.Source
 	}
 
+<<<<<<< HEAD
 	if tlvs, err := p.getTeleportTLVs(); err == nil {
 		if tlvs.originalAddress != nil {
 			return tlvs.originalAddress
@@ -590,6 +591,14 @@ func (p *ProxyLine) ResolveSource() net.Addr {
 	}
 
 	return &p.Source
+=======
+	tlvs, err := p.getTeleportTLVs()
+	if err != nil {
+		return &p.Source
+	}
+
+	return tlvs.originalAddress
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 func getTLSCerts(ca types.CertAuthority) [][]byte {

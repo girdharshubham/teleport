@@ -12,6 +12,7 @@ RUN apt-get update && \
 # anything.
 #
 # The version should be kept in sync with buf-ts.gen.yaml.
+<<<<<<< HEAD
 RUN npm exec --yes \
   --package=@protobuf-ts/plugin@2.9.3 \
   --package=@protobuf-ts/plugin-framework@2.9.3 \
@@ -20,6 +21,9 @@ RUN npm exec --yes \
   --package=@protobuf-ts/runtime-rpc@2.9.3 \
   --package=typescript@3.9.10 \
   -- true
+=======
+RUN npm exec --yes --package=@protobuf-ts/plugin@2.9.3 -- true
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 
 # buf version including v, like "v1.26.1"
 ARG BUF_VERSION

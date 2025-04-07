@@ -179,7 +179,11 @@ func TestSystemdUnitDriver(t *testing.T) {
 
 	sb, err = os.ReadFile(schedPath)
 	require.NoError(t, err)
+<<<<<<< HEAD
 	require.Empty(t, string(sb))
+=======
+	require.Equal(t, "", string(sb))
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // fakeDriver is used to inject custom behavior into a dummy Driver instance.

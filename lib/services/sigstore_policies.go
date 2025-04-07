@@ -155,6 +155,7 @@ func ValidateSigstorePolicy(s *workloadidentityv1pb.SigstorePolicy) error {
 			}
 		}
 
+<<<<<<< HEAD
 		roots := make(root.TrustedMaterialCollection, 0)
 		for idx, trustedRoot := range v.Keyless.GetTrustedRoots() {
 			root, err := root.NewTrustedRootFromJSON([]byte(trustedRoot))
@@ -183,6 +184,16 @@ func ValidateSigstorePolicy(s *workloadidentityv1pb.SigstorePolicy) error {
 	}
 
 	for idx, attestation := range requirements.GetAttestations() {
+=======
+		for idx, trustedRoot := range v.Keyless.GetTrustedRoots() {
+			if _, err := root.NewTrustedRootFromJSON([]byte(trustedRoot)); err != nil {
+				return trace.BadParameter("spec.keyless.trusted_roots[%d]: failed to parse trusted root: %v", idx, err)
+			}
+		}
+	}
+
+	for idx, attestation := range s.GetSpec().GetRequirements().GetAttestations() {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		if attestation.GetPredicateType() == "" {
 			return trace.BadParameter("spec.requirements.attestations[%d].predicate_type: is required", idx)
 		}

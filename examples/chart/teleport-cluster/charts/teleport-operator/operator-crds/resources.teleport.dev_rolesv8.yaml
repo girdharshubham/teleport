@@ -273,10 +273,13 @@ spec:
                       Role grants access to.
                     items:
                       properties:
+<<<<<<< HEAD
                         api_group:
                           description: APIGroup specifies the Kubernetes API group
                             of the Kubernetes resource. It supports wildcards.
                           type: string
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
                         kind:
                           description: Kind specifies the Kubernetes Resource type.
                           type: string
@@ -865,10 +868,13 @@ spec:
                       Role grants access to.
                     items:
                       properties:
+<<<<<<< HEAD
                         api_group:
                           description: APIGroup specifies the Kubernetes API group
                             of the Kubernetes resource. It supports wildcards.
                           type: string
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
                         kind:
                           description: Kind specifies the Kubernetes Resource type.
                           type: string

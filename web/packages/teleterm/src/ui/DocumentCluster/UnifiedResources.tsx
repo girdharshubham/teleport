@@ -402,8 +402,11 @@ const Resources = memo(
         })}
       >
         <SharedUnifiedResources
+<<<<<<< HEAD
           // TODO(kimlisa): add support later
           onShowStatusInfo={() => null}
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
           params={props.queryParams}
           setParams={props.onParamsChange}
           unifiedResourcePreferencesAttempt={props.userPreferencesAttempt}

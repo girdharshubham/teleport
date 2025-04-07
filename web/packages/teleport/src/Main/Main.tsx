@@ -319,7 +319,11 @@ export const ContentMinWidth = ({ children }: { children: ReactNode }) => {
           overflow-y: auto;
           ${marginTransitionCss({
             sidePanelOpened: infoGuideSidePanelOpened,
+<<<<<<< HEAD
             panelWidth: infoGuideConfig?.viewHasOwnSidePanel ? 0 : panelWidth,
+=======
+            panelWidth,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
           })}
         `}
       >

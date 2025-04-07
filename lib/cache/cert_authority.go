@@ -27,11 +27,17 @@ import (
 	"github.com/gravitational/teleport/lib/utils/sortcache"
 )
 
+<<<<<<< HEAD
 type certAuthorityIndex string
 
 const certAuthorityIDIndex certAuthorityIndex = "id"
 
 func newCertAuthorityCollection(t services.Trust, w types.WatchKind) (*collection[types.CertAuthority, certAuthorityIndex], error) {
+=======
+const certAuthorityStoreIDIndex = "id"
+
+func newCertAuthorityCollection(t services.Trust, w types.WatchKind) (*collection[types.CertAuthority], error) {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if t == nil {
 		return nil, trace.BadParameter("missing parameter Trust")
 	}
@@ -39,9 +45,15 @@ func newCertAuthorityCollection(t services.Trust, w types.WatchKind) (*collectio
 	var filter types.CertAuthorityFilter
 	filter.FromMap(w.Filter)
 
+<<<<<<< HEAD
 	return &collection[types.CertAuthority, certAuthorityIndex]{
 		store: newStore(map[certAuthorityIndex]func(types.CertAuthority) string{
 			certAuthorityIDIndex: func(ca types.CertAuthority) string {
+=======
+	return &collection[types.CertAuthority]{
+		store: newStore(map[string]func(types.CertAuthority) string{
+			certAuthorityStoreIDIndex: func(ca types.CertAuthority) string {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				return string(ca.GetType()) + "/" + ca.GetID().DomainName
 			},
 		}),
@@ -66,7 +78,11 @@ func newCertAuthorityCollection(t services.Trust, w types.WatchKind) (*collectio
 				// if caType was added in this major version we might get a BadParameter
 				// error if we're connecting to an older upstream that doesn't know about it
 				if err != nil {
+<<<<<<< HEAD
 					if !types.IsUnsupportedAuthorityErr(err) || !caType.NewlyAdded() {
+=======
+					if !(types.IsUnsupportedAuthorityErr(err) && caType.NewlyAdded()) {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 						return nil, trace.Wrap(err)
 					}
 					continue
@@ -109,7 +125,11 @@ func (c *Cache) GetCertAuthority(ctx context.Context, id types.CertAuthID, loadS
 	defer rg.Release()
 
 	if rg.ReadCache() {
+<<<<<<< HEAD
 		ca, err := rg.store.get(certAuthorityIDIndex, string(id.Type)+"/"+id.DomainName)
+=======
+		ca, err := rg.store.get(certAuthorityStoreIDIndex, string(id.Type)+"/"+id.DomainName)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		if err != nil {
 			// release read lock early
 			rg.Release()
@@ -167,7 +187,11 @@ func (c *Cache) GetCertAuthorities(ctx context.Context, caType types.CertAuthTyp
 
 	if rg.ReadCache() {
 		cas := make([]types.CertAuthority, 0, rg.store.len())
+<<<<<<< HEAD
 		for ca := range rg.store.resources(certAuthorityIDIndex, string(caType), sortcache.NextKey(string(caType))) {
+=======
+		for ca := range rg.store.resources(certAuthorityStoreIDIndex, string(caType), sortcache.NextKey(string(caType))) {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			if loadSigningKeys {
 				cas = append(cas, ca.Clone())
 			} else {

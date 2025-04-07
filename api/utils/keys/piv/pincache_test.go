@@ -40,7 +40,11 @@ func TestPINCache(t *testing.T) {
 
 	// Advancing by the small TTL should only expire the pin for the small TTL.
 	clock.Advance(smallTTL)
+<<<<<<< HEAD
 	require.Empty(t, pinCache.getPIN(smallTTL))
+=======
+	require.Zero(t, pinCache.getPIN(smallTTL))
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	require.Equal(t, testPIN, pinCache.getPIN(mediumTTL))
 	require.Equal(t, testPIN, pinCache.getPIN(largeTTL))
 
@@ -52,7 +56,13 @@ func TestPINCache(t *testing.T) {
 
 	// Advancing by the medium TTL, used to set the initial cache, should expire the PIN cache.
 	clock.Advance(mediumTTL)
+<<<<<<< HEAD
 	require.Empty(t, pinCache.getPIN(smallTTL))
 	require.Empty(t, pinCache.getPIN(mediumTTL))
 	require.Empty(t, pinCache.getPIN(largeTTL))
+=======
+	require.Zero(t, pinCache.getPIN(smallTTL))
+	require.Zero(t, pinCache.getPIN(mediumTTL))
+	require.Zero(t, pinCache.getPIN(largeTTL))
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }

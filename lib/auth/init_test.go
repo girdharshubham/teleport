@@ -2206,7 +2206,11 @@ func TestTeleportProcessAuthVersionUpgradeCheck(t *testing.T) {
 		{
 			name:            "major-upgrade-with-dev-skip-check",
 			initialVersion:  fmt.Sprintf("%d.0.0", api.VersionMajor-2),
+<<<<<<< HEAD
 			expectedVersion: teleport.Version,
+=======
+			expectedVersion: fmt.Sprintf("%d.0.0", api.VersionMajor-2),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			expectError:     false,
 			skipCheck:       true,
 		},
@@ -2230,7 +2234,11 @@ func TestTeleportProcessAuthVersionUpgradeCheck(t *testing.T) {
 		{
 			name:            "major-downgrade-with-dev-skip-check",
 			initialVersion:  fmt.Sprintf("%d.0.0", api.VersionMajor+2),
+<<<<<<< HEAD
 			expectedVersion: teleport.Version,
+=======
+			expectedVersion: fmt.Sprintf("%d.0.0", api.VersionMajor+2),
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			expectError:     false,
 			skipCheck:       true,
 		},

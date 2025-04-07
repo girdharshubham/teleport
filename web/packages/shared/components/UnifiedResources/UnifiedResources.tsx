@@ -617,6 +617,7 @@ export function UnifiedResources(props: UnifiedResourcesProps) {
                   },
                 }),
                 key: generateUnifiedResourceKey(resource),
+<<<<<<< HEAD
                 // TODO(kimlisa): teleterm will pass this field as "null"
                 // to add support later.
                 onShowStatusInfo: () =>
@@ -624,6 +625,10 @@ export function UnifiedResources(props: UnifiedResourcesProps) {
                 showingStatusInfo:
                   infoGuideConfig?.id &&
                   infoGuideConfig.id === getResourceId(resource),
+=======
+                onShowStatusInfo: () => null,
+                showingStatusInfo: false,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
               }))
             : []
         }

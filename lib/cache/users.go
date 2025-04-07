@@ -29,18 +29,30 @@ import (
 	"github.com/gravitational/teleport/lib/services"
 )
 
+<<<<<<< HEAD
 type userIndex string
 
 const userNameIndex userIndex = "name"
 
 func newUserCollection(u services.UsersService, w types.WatchKind) (*collection[types.User, userIndex], error) {
+=======
+const userStoreNameIndex = "name"
+
+func newUserCollection(u services.UsersService, w types.WatchKind) (*collection[types.User], error) {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if u == nil {
 		return nil, trace.BadParameter("missing parameter UsersService")
 	}
 
+<<<<<<< HEAD
 	return &collection[types.User, userIndex]{
 		store: newStore(map[userIndex]func(types.User) string{
 			userNameIndex: func(u types.User) string {
+=======
+	return &collection[types.User]{
+		store: newStore(map[string]func(types.User) string{
+			userStoreNameIndex: func(u types.User) string {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				return u.GetName()
 			},
 		}),
@@ -80,7 +92,11 @@ func (c *Cache) GetUser(ctx context.Context, name string, withSecrets bool) (typ
 		return user, trace.Wrap(err)
 	}
 
+<<<<<<< HEAD
 	u, err := rg.store.get(userNameIndex, name)
+=======
+	u, err := rg.store.get(userStoreNameIndex, name)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	if err != nil {
 		// release read lock early
 		rg.Release()
@@ -123,7 +139,11 @@ func (c *Cache) GetUsers(ctx context.Context, withSecrets bool) ([]types.User, e
 	}
 
 	users := make([]types.User, 0, rg.store.len())
+<<<<<<< HEAD
 	for u := range rg.store.resources(userNameIndex, "", "") {
+=======
+	for u := range rg.store.resources(userStoreNameIndex, "", "") {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		if withSecrets {
 			users = append(users, u.Clone())
 		} else {
@@ -162,7 +182,11 @@ func (c *Cache) ListUsers(ctx context.Context, req *userspb.ListUsersRequest) (*
 	}
 
 	var resp userspb.ListUsersResponse
+<<<<<<< HEAD
 	for u := range rg.store.resources(userNameIndex, req.PageToken, "") {
+=======
+	for u := range rg.store.resources(userStoreNameIndex, req.PageToken, "") {
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		uv2, ok := u.(*types.UserV2)
 		if !ok {
 			continue

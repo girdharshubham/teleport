@@ -17,7 +17,11 @@
       "aws_secret_access_key": "zyxw9876-this-is-an-example"
     },
     "cloud": {
+<<<<<<< HEAD
       "version": "17.4.6",
+=======
+      "version": "17.4.3",
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
       "major_version": "17",
       "sla": {
         "monthly_percentage": "99.9%",
@@ -339,11 +343,14 @@
       "source": "/enroll-resources/application-access/okta/",
       "destination": "/admin-guides/access-controls/okta/",
       "permanent": true
+<<<<<<< HEAD
     },
     {
       "source": "/api/getting-started/",
       "destination": "/admin-guides/api/getting-started/",
       "permanent": true
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
     }
   ]
 }

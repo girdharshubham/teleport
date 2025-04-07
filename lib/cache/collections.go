@@ -21,6 +21,7 @@ import (
 
 	"github.com/gravitational/trace"
 
+<<<<<<< HEAD
 	accessmonitoringrulesv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/accessmonitoringrules/v1"
 	autoupdatev1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/autoupdate/v1"
 	clusterconfigv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/clusterconfig/v1"
@@ -34,6 +35,9 @@ import (
 	"github.com/gravitational/teleport/api/types"
 	"github.com/gravitational/teleport/api/types/accesslist"
 	"github.com/gravitational/teleport/api/types/userloginstate"
+=======
+	"github.com/gravitational/teleport/api/types"
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 )
 
 // collectionHandler is used by the [Cache] to seed the initial
@@ -60,6 +64,7 @@ type collectionHandler interface {
 type collections struct {
 	byKind map[resourceKind]collectionHandler
 
+<<<<<<< HEAD
 	provisionTokens                  *collection[types.ProvisionToken, provisionTokenIndex]
 	staticTokens                     *collection[types.StaticTokens, staticTokensIndex]
 	certAuthorities                  *collection[types.CertAuthority, certAuthorityIndex]
@@ -117,6 +122,14 @@ type collections struct {
 	remoteClusters                   *collection[types.RemoteCluster, remoteClusterIndex]
 	userTasks                        *collection[*usertasksv1.UserTask, userTaskIndex]
 	userLoginStates                  *collection[*userloginstate.UserLoginState, userLoginStateIndex]
+=======
+	staticTokens    *collection[types.StaticTokens]
+	certAuthorities *collection[types.CertAuthority]
+	users           *collection[types.User]
+	roles           *collection[types.Role]
+	authServers     *collection[types.Server]
+	proxyServers    *collection[types.Server]
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 // setupCollections ensures that the appropriate [collection] is
@@ -131,6 +144,7 @@ func setupCollections(c Config) (*collections, error) {
 		resourceKind := resourceKindFromWatchKind(watch)
 
 		switch watch.Kind {
+<<<<<<< HEAD
 		case types.KindToken:
 			collect, err := newProvisionTokensCollection(c.Provisioner, watch)
 			if err != nil {
@@ -473,42 +487,83 @@ func setupCollections(c Config) (*collections, error) {
 			out.byKind[resourceKind] = out.accessLists
 		case types.KindAccessListMember:
 			collect, err := newAccessListMemberCollection(c.AccessLists, watch)
+=======
+		case types.KindStaticTokens:
+			collect, err := newStaticTokensCollection(c.ClusterConfig, watch)
 			if err != nil {
 				return nil, trace.Wrap(err)
 			}
 
+			out.staticTokens = collect
+			out.byKind[resourceKind] = out.staticTokens
+		case types.KindCertAuthority:
+			collect, err := newCertAuthorityCollection(c.Trust, watch)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
+			if err != nil {
+				return nil, trace.Wrap(err)
+			}
+
+<<<<<<< HEAD
 			out.accessListMembers = collect
 			out.byKind[resourceKind] = out.accessListMembers
 		case types.KindAccessListReview:
 			collect, err := newAccessListReviewCollection(c.AccessLists, watch)
+=======
+			out.certAuthorities = collect
+			out.byKind[resourceKind] = out.certAuthorities
+		case types.KindUser:
+			collect, err := newUserCollection(c.Users, watch)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			if err != nil {
 				return nil, trace.Wrap(err)
 			}
 
+<<<<<<< HEAD
 			out.accessListReviews = collect
 			out.byKind[resourceKind] = out.accessListReviews
 		case types.KindCrownJewel:
 			collect, err := newCrownJewelCollection(c.CrownJewels, watch)
+=======
+			out.users = collect
+			out.byKind[resourceKind] = out.users
+		case types.KindRole:
+			collect, err := newRoleCollection(c.Access, watch)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			if err != nil {
 				return nil, trace.Wrap(err)
 			}
 
+<<<<<<< HEAD
 			out.crownJewels = collect
 			out.byKind[resourceKind] = out.crownJewels
 		case types.KindAccessGraphSettings:
 			collect, err := newAccessGraphSettingsCollection(c.ClusterConfig, watch)
+=======
+			out.roles = collect
+			out.byKind[resourceKind] = out.roles
+		case types.KindAuthServer:
+			collect, err := newAuthServerCollection(c.Presence, watch)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			if err != nil {
 				return nil, trace.Wrap(err)
 			}
 
+<<<<<<< HEAD
 			out.accessGraphSettings = collect
 			out.byKind[resourceKind] = out.accessGraphSettings
 		case types.KindIntegration:
 			collect, err := newIntegrationCollection(c.Integrations, watch)
+=======
+			out.authServers = collect
+			out.byKind[resourceKind] = out.authServers
+		case types.KindProxy:
+			collect, err := newProxyServerCollection(c.Presence, watch)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 			if err != nil {
 				return nil, trace.Wrap(err)
 			}
 
+<<<<<<< HEAD
 			out.integrations = collect
 			out.byKind[resourceKind] = out.integrations
 		case types.KindPluginStaticCredentials:
@@ -591,6 +646,10 @@ func setupCollections(c Config) (*collections, error) {
 
 			out.userLoginStates = collect
 			out.byKind[resourceKind] = out.userLoginStates
+=======
+			out.proxyServers = collect
+			out.byKind[resourceKind] = out.proxyServers
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		}
 	}
 

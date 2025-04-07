@@ -208,6 +208,7 @@ func TestValidateSigstorePolicy(t *testing.T) {
 			},
 			err: "spec.keyless.trusted_roots[0]: failed to parse trusted root",
 		},
+<<<<<<< HEAD
 		"keyless trusted_roots contains no tlogs or timestampAuthorities": {
 			mod: func(p *workloadidentityv1.SigstorePolicy) {
 				// This is GitHub's trusted roots with the `tlogs` and timestampAuthorities`
@@ -248,18 +249,23 @@ func TestValidateSigstorePolicy(t *testing.T) {
 			},
 			err: "spec.keyless.trusted_roots: must configure at least one transparency log or timestamp authority",
 		},
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		"no requirements": {
 			mod: func(p *workloadidentityv1.SigstorePolicy) {
 				p.Spec.Requirements = nil
 			},
 			err: "spec.requirements: is required",
 		},
+<<<<<<< HEAD
 		"empty requirements": {
 			mod: func(p *workloadidentityv1.SigstorePolicy) {
 				p.Spec.Requirements = &workloadidentityv1.SigstorePolicyRequirements{}
 			},
 			err: "spec.requirements: either artifact_signature or attestations is required",
 		},
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		"required attestation empty predicate": {
 			mod: func(p *workloadidentityv1.SigstorePolicy) {
 				p.Spec.Requirements.Attestations = []*workloadidentityv1.InTotoAttestationMatcher{
@@ -268,6 +274,7 @@ func TestValidateSigstorePolicy(t *testing.T) {
 			},
 			err: "spec.requirements.attestations[0].predicate_type: is required",
 		},
+<<<<<<< HEAD
 		"attestations and artifact signature": {
 			mod: func(p *workloadidentityv1.SigstorePolicy) {
 				p.Spec.Requirements = &workloadidentityv1.SigstorePolicyRequirements{
@@ -279,6 +286,8 @@ func TestValidateSigstorePolicy(t *testing.T) {
 			},
 			err: "spec.requirements: artifact_signature and attestations are mutually exclusive",
 		},
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	}
 	for name, tc := range testCases {
 		t.Run(name, func(t *testing.T) {

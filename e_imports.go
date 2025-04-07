@@ -66,6 +66,13 @@ import (
 	_ "github.com/aws/aws-sdk-go-v2/service/ssoadmin/types"
 	_ "github.com/aws/aws-sdk-go-v2/service/sts/types"
 	_ "github.com/beevik/etree"
+<<<<<<< HEAD
+=======
+	_ "github.com/coreos/go-oidc/jose"
+	_ "github.com/coreos/go-oidc/key"
+	_ "github.com/coreos/go-oidc/oauth2"
+	_ "github.com/coreos/go-oidc/oidc"
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 	_ "github.com/coreos/go-semver/semver"
 	_ "github.com/crewjam/saml"
 	_ "github.com/crewjam/saml/samlsp"

@@ -25,9 +25,14 @@ import (
 	"testing/synctest"
 	"time"
 
+<<<<<<< HEAD
 	"github.com/stretchr/testify/require"
 
 	"github.com/gravitational/teleport/lib/player"
+=======
+	"github.com/gravitational/teleport/lib/player"
+	"github.com/stretchr/testify/require"
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 )
 
 /*

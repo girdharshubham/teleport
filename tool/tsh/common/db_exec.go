@@ -394,9 +394,12 @@ type sharedDatabaseExecClient struct {
 	clusterClient *client.ClusterClient
 	accessChecker services.AccessChecker
 	tracer        oteltrace.Tracer
+<<<<<<< HEAD
 
 	issueCertMu         sync.Mutex
 	reusableMFAResponse *proto.MFAAuthenticateResponse
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 func newSharedDatabaseExecClient(cf *CLIConf, tc *client.TeleportClient) (*sharedDatabaseExecClient, error) {
@@ -444,6 +447,7 @@ func (c *sharedDatabaseExecClient) getProfileStatus() *client.ProfileStatus {
 
 // issueCert issues a single use cert for the db route.
 func (c *sharedDatabaseExecClient) issueCert(ctx context.Context, dbInfo *databaseInfo) (tls.Certificate, error) {
+<<<<<<< HEAD
 	c.issueCertMu.Lock()
 	defer c.issueCertMu.Unlock()
 
@@ -469,6 +473,20 @@ func (c *sharedDatabaseExecClient) issueCert(ctx context.Context, dbInfo *databa
 		return tls.Certificate{}, trace.Wrap(err)
 	}
 	return dbCert, nil
+=======
+	// TODO(greedy52) add support for multi-session MFA.
+	params := client.ReissueParams{
+		RouteToDatabase: client.RouteToDatabaseToProto(dbInfo.RouteToDatabase),
+		AccessRequests:  c.profile.ActiveRequests,
+	}
+
+	keyRing, _, err := c.clusterClient.IssueUserCertsWithMFA(ctx, params)
+	if err != nil {
+		return tls.Certificate{}, trace.Wrap(err)
+	}
+	dbCert, err := keyRing.DBTLSCert(dbInfo.RouteToDatabase.ServiceName)
+	return dbCert, trace.Wrap(err)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 }
 
 func (c *sharedDatabaseExecClient) listDatabasesWithFilter(ctx context.Context, filter *proto.ListResourcesRequest) (databases []types.Database, err error) {

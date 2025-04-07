@@ -33,7 +33,10 @@ import {
   getStatusBackgroundColor,
 } from '../shared/getBackgroundColor';
 import { PinButton } from '../shared/PinButton';
+<<<<<<< HEAD
 import { ResourceActionButtonWrapper } from '../shared/ResourceActionButton';
+=======
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 import { SingleLineBox } from '../shared/SingleLineBox';
 import { ResourceItemProps } from '../types';
 import { WarningRightEdgeBadgeSvg } from './WarningRightEdgeBadgeSvg';

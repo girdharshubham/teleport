@@ -19,7 +19,11 @@
 /**
  * Used to display unified resource status info
  */
+<<<<<<< HEAD
 export const resourceStatusPanelWidth = 450;
+=======
+export const resourceStatusPanelWidth = 430;
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 /**
  * Used to display documentation/help/hint info
  */

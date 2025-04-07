@@ -342,7 +342,11 @@ func (e *wsStreamClient) stream(conn *gwebsocket.Conn, options clientremotecomma
 				}
 				e.mu.Lock()
 				// the stdout and stderr streams receive the last stdin input and we must trim it.
+<<<<<<< HEAD
 				s := strings.ReplaceAll(string(buf[1:]), e.cacheBuff.String(), "")
+=======
+				s := strings.Replace(string(buf[1:]), e.cacheBuff.String(), "", -1)
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 				e.mu.Unlock()
 				_, err = w.Write([]byte(s))
 				if err != nil {

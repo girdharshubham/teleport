@@ -94,6 +94,17 @@ func TestNodeCAFiltering(t *testing.T) {
 		DynamicAccess:           p.cache.dynamicAccessCache,
 		Presence:                p.cache.presenceCache,
 		Restrictions:            p.cache.restrictionsCache,
+<<<<<<< HEAD
+=======
+		Apps:                    p.cache.appsCache,
+		Kubernetes:              p.cache.kubernetesCache,
+		Databases:               p.cache.databasesCache,
+		DatabaseServices:        p.cache.databaseServicesCache,
+		AppSession:              p.cache.appSessionCache,
+		WebSession:              p.cache.webSessionCache,
+		WebToken:                p.cache.webTokenCache,
+		WindowsDesktops:         p.cache.windowsDesktopsCache,
+>>>>>>> d6594000e3 (Add auditlog exports to TAG via grpc (#53747))
 		DynamicWindowsDesktops:  p.cache.dynamicWindowsDesktopsCache,
 		SAMLIdPServiceProviders: p.samlIDPServiceProviders,
 		UserGroups:              p.userGroups,
