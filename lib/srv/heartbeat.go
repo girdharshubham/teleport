@@ -162,9 +162,9 @@ func NewHeartbeat(cfg HeartbeatConfig) (*Heartbeat, error) {
 	}
 	h.logger.DebugContext(ctx, "Starting heartbeat with announce period",
 		"mode", cfg.Mode,
-		"keep_alive_period", cfg.KeepAlivePeriod,
-		"announce_period", cfg.AnnouncePeriod,
-		"check_period", cfg.CheckPeriod,
+		"keep_alive_period", cfg.KeepAlivePeriod.String(),
+		"announce_period", cfg.AnnouncePeriod.String(),
+		"check_period", cfg.CheckPeriod.String(),
 	)
 	return h, nil
 }

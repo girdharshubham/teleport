@@ -377,6 +377,10 @@ func (h *HeartbeatV2) run() {
 		case sender := <-h.handle.Sender():
 			// sender is available, hand off to the primary run loop
 			h.runWithSender(sender)
+			// check if we are closing to avoid randomly looping back into the sender, which can trigger a degraded event
+			if h.closeContext.Err() != nil {
+				return
+			}
 			h.degradedCheck.Reset()
 		case <-h.announce.Next():
 			h.testEvent(hbv2AnnounceInterval)
@@ -500,6 +504,9 @@ func (h *HeartbeatV2) onHeartbeat(err error) {
 		h.testEvent(hbv2OnHeartbeatOk)
 	}
 	if h.onHeartbeatInner == nil {
+		return
+	}
+	if err := h.closeContext.Err(); err != nil {
 		return
 	}
 	h.onHeartbeatInner(err)
