@@ -4031,10 +4031,6 @@ func onSSH(cf *CLIConf) error {
 		return trace.BadParameter("required argument '[user@]host' not provided")
 	}
 
-	if cf.ForkAfterAuthentication && cf.forkSignalFd != 0 {
-		return trace.BadParameter("process is already forked")
-	}
-
 	tc, err := makeClient(cf)
 	if err != nil {
 		return trace.Wrap(err)
@@ -4050,7 +4046,7 @@ func onSSH(cf *CLIConf) error {
 	tc.Stdin = os.Stdin
 
 	if cf.ForkAfterAuthentication && cf.forkSignalFd == 0 {
-		cmd, signalFd, err := client.BuildForkAuthenticateCommand(cf.Context, client.BuildForkAuthenticateCommandParams{
+		cmd, err := client.BuildForkAuthenticateCommand(client.BuildForkAuthenticateCommandParams{
 			GetArgs: func(signalFd uint64) []string {
 				args := make([]string, 0, len(cf.originalArgs)+2)
 				for i, arg := range cf.originalArgs {
@@ -4070,7 +4066,7 @@ func onSSH(cf *CLIConf) error {
 		if err != nil {
 			return trace.Wrap(err)
 		}
-		return trace.Wrap(client.RunForkAuthenticateChild(cf.Context, cmd, signalFd))
+		return trace.Wrap(client.RunForkAuthenticateChild(cf.Context, cmd))
 	}
 
 	err = retryWithAccessRequest(cf, tc, func() error {
@@ -4083,9 +4079,7 @@ func onSSH(cf *CLIConf) error {
 			if cf.forkSignalFd != 0 {
 				opts = append(opts, client.WithForkAfterAuthentication(func() error {
 					disownSignal := os.NewFile(uintptr(cf.forkSignalFd), "disown")
-					if stdin, ok := tc.Stdin.(io.ReadCloser); ok {
-						stdin.Close()
-					}
+					disownSignal.Write([]byte("a"))
 					return trace.Wrap(disownSignal.Close())
 				}))
 			}
