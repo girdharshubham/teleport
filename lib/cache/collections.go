@@ -29,6 +29,7 @@ import (
 	identitycenterv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/identitycenter/v1"
 	machineidv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/machineid/v1"
 	notificationsv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/notifications/v1"
+	userprovisioningv2 "github.com/gravitational/teleport/api/gen/proto/go/teleport/userprovisioning/v2"
 	workloadidentityv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/workloadidentity/v1"
 	"github.com/gravitational/teleport/api/types"
 	"github.com/gravitational/teleport/api/types/accesslist"
@@ -111,6 +112,7 @@ type collections struct {
 	uiConfigs                        *collection[types.UIConfig, webUIConfigIndex]
 	installers                       *collection[types.Installer, installerIndex]
 	locks                            *collection[types.Lock, lockIndex]
+	staticHostUsers                  *collection[*userprovisioningv2.StaticHostUser, staticHostUserIndex]
 }
 
 // setupCollections ensures that the appropriate [collection] is
@@ -552,6 +554,14 @@ func setupCollections(c Config) (*collections, error) {
 
 			out.locks = collect
 			out.byKind[resourceKind] = out.locks
+		case types.KindStaticHostUser:
+			collect, err := newStaticHostUserCollection(c.StaticHostUsers, watch)
+			if err != nil {
+				return nil, trace.Wrap(err)
+			}
+
+			out.staticHostUsers = collect
+			out.byKind[resourceKind] = out.staticHostUsers
 		}
 	}
 
