@@ -502,7 +502,6 @@ type Cache struct {
 	accessCache                  services.Access
 	dynamicAccessCache           services.DynamicAccessExt
 	presenceCache                services.Presence
-	restrictionsCache            services.Restrictions
 	databaseObjectsCache         *local.DatabaseObjectService
 	dynamicWindowsDesktopsCache  services.DynamicWindowsDesktops
 	userGroupsCache              services.UserGroups
@@ -999,7 +998,6 @@ func New(config Config) (*Cache, error) {
 		accessCache:                  local.NewAccessService(config.Backend),
 		dynamicAccessCache:           local.NewDynamicAccessService(config.Backend),
 		presenceCache:                local.NewPresenceService(config.Backend),
-		restrictionsCache:            local.NewRestrictionsService(config.Backend),
 		dynamicWindowsDesktopsCache:  dynamicDesktopsService,
 		userGroupsCache:              userGroupsCache,
 		discoveryConfigsCache:        discoveryConfigsCache,
@@ -1844,20 +1842,6 @@ func (c *Cache) ListDatabaseObjects(ctx context.Context, size int, pageToken str
 	}
 	defer rg.Release()
 	return rg.reader.ListDatabaseObjects(ctx, size, pageToken)
-}
-
-// GetNetworkRestrictions gets the network restrictions.
-func (c *Cache) GetNetworkRestrictions(ctx context.Context) (types.NetworkRestrictions, error) {
-	ctx, span := c.Tracer.Start(ctx, "cache/GetNetworkRestrictions")
-	defer span.End()
-
-	rg, err := readLegacyCollectionCache(c, c.legacyCacheCollections.networkRestrictions)
-	if err != nil {
-		return nil, trace.Wrap(err)
-	}
-	defer rg.Release()
-
-	return rg.reader.GetNetworkRestrictions(ctx)
 }
 
 // GetDynamicWindowsDesktop returns registered dynamic Windows desktop by name.

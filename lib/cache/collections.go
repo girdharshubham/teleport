@@ -117,6 +117,7 @@ type collections struct {
 	remoteClusters                   *collection[types.RemoteCluster, remoteClusterIndex]
 	userTasks                        *collection[*usertasksv1.UserTask, userTaskIndex]
 	userLoginStates                  *collection[*userloginstate.UserLoginState, userLoginStateIndex]
+	networkRestrictions              *collection[types.NetworkRestrictions, networkingRestrictionIndex]
 }
 
 // setupCollections ensures that the appropriate [collection] is
@@ -591,6 +592,14 @@ func setupCollections(c Config) (*collections, error) {
 
 			out.userLoginStates = collect
 			out.byKind[resourceKind] = out.userLoginStates
+		case types.KindNetworkRestrictions:
+			collect, err := newNetworkingRestrictionCollection(c.Restrictions, watch)
+			if err != nil {
+				return nil, trace.Wrap(err)
+			}
+
+			out.networkRestrictions = collect
+			out.byKind[resourceKind] = out.networkRestrictions
 		}
 	}
 
