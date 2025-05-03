@@ -266,7 +266,7 @@ func TestWatcherDynamicResource(t *testing.T) {
 
 		// Validate that AssumeRoleARN is overwritten by the one configured in
 		// the resource matcher.
-		db5 = discoveredDB5.Copy()
+		db5 = discoveredDB5.Copy().(*types.DatabaseV3)
 		setStatusAWSAssumeRole(db5, "arn:aws:iam::123456789012:role/DBAccess", "external-id")
 
 		assertReconciledResource(t, reconcileCh, types.Databases{db0, db2, db4, db5})
@@ -285,7 +285,7 @@ func TestWatcherDynamicResource(t *testing.T) {
 		err = testCtx.authServer.CreateDatabase(ctx, azureDB)
 		require.NoError(t, err)
 
-		db6 = azureDB.Copy()
+		db6 = azureDB.Copy().(*types.DatabaseV3)
 		assertReconciledResource(t, reconcileCh, types.Databases{db0, db2, db4, db5, db6})
 	})
 

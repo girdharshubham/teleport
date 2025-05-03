@@ -352,7 +352,7 @@ func (s *Server) getServerInfo(app types.Application) (*types.AppServerV3, error
 		Hostname: s.c.Hostname,
 		HostID:   s.c.HostID,
 		Rotation: s.getRotationState(),
-		App:      copy,
+		App:      copy.(*types.AppV3),
 		ProxyIDs: s.c.ConnectedProxyGetter.GetProxyIDs(),
 	})
 
@@ -564,7 +564,7 @@ func (s *Server) GetAppByPublicAddress(ctx context.Context, publicAddr string) (
 // appWithUpdatedLabelsLocked will inject updated dynamic and cloud labels into
 // an application object.
 // The caller must invoke an RLock on `s.mu` before calling this function.
-func (s *Server) appWithUpdatedLabelsLocked(app types.Application) *types.AppV3 {
+func (s *Server) appWithUpdatedLabelsLocked(app types.Application) types.Application {
 	// Create a copy of the application to modify
 	copy := app.Copy()
 

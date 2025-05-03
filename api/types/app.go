@@ -85,7 +85,7 @@ type Application interface {
 	// SetUserGroups will set the list of user group IDs associated with the application.
 	SetUserGroups([]string)
 	// Copy returns a copy of this app resource.
-	Copy() *AppV3
+	Copy() Application
 	// GetIntegration will return the Integration.
 	// If present, the Application must use the Integration's credentials instead of ambient credentials to access Cloud APIs.
 	GetIntegration() string
@@ -360,7 +360,7 @@ func (a *AppV3) String() string {
 }
 
 // Copy returns a copy of this database resource.
-func (a *AppV3) Copy() *AppV3 {
+func (a *AppV3) Copy() Application {
 	return utils.CloneProtoMsg(a)
 }
 

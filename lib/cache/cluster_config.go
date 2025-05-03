@@ -36,11 +36,11 @@ func newClusterNameCollection(c services.ClusterConfiguration, w types.WatchKind
 	}
 
 	return &collection[types.ClusterName, clusterNameIndex]{
-		store: newStore(map[clusterNameIndex]func(types.ClusterName) string{
-			clusterNameDefaultIndex: func(n types.ClusterName) string {
-				return n.GetName()
-			},
-		}),
+		store: newStore(
+			types.ClusterName.Clone,
+			map[clusterNameIndex]func(types.ClusterName) string{
+				clusterNameDefaultIndex: types.ClusterName.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.ClusterName, error) {
 			name, err := c.GetClusterName(ctx)
 			if err != nil {
@@ -98,11 +98,11 @@ func newClusterAuditConfigCollection(c services.ClusterConfiguration, w types.Wa
 	}
 
 	return &collection[types.ClusterAuditConfig, clusterAuditConfigIndex]{
-		store: newStore(map[clusterAuditConfigIndex]func(types.ClusterAuditConfig) string{
-			clusterAuditConfigNameIndex: func(n types.ClusterAuditConfig) string {
-				return n.GetName()
-			},
-		}),
+		store: newStore(
+			types.ClusterAuditConfig.Clone,
+			map[clusterAuditConfigIndex]func(types.ClusterAuditConfig) string{
+				clusterAuditConfigNameIndex: types.ClusterAuditConfig.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.ClusterAuditConfig, error) {
 			cfg, err := c.GetClusterAuditConfig(ctx)
 			if err != nil {
@@ -164,11 +164,11 @@ func newClusterNetworkingConfigCollection(c services.ClusterConfiguration, w typ
 	}
 
 	return &collection[types.ClusterNetworkingConfig, clusterNetworkingConfigIndex]{
-		store: newStore(map[clusterNetworkingConfigIndex]func(types.ClusterNetworkingConfig) string{
-			clusterNetworkingConfigNameIndex: func(n types.ClusterNetworkingConfig) string {
-				return n.GetName()
-			},
-		}),
+		store: newStore(
+			types.ClusterNetworkingConfig.Clone,
+			map[clusterNetworkingConfigIndex]func(types.ClusterNetworkingConfig) string{
+				clusterNetworkingConfigNameIndex: types.ClusterNetworkingConfig.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.ClusterNetworkingConfig, error) {
 			cfg, err := c.GetClusterNetworkingConfig(ctx)
 			if err != nil {
@@ -226,11 +226,11 @@ func newAuthPreferenceCollection(c services.ClusterConfiguration, w types.WatchK
 	}
 
 	return &collection[types.AuthPreference, authPreferenceIndex]{
-		store: newStore(map[authPreferenceIndex]func(types.AuthPreference) string{
-			authPreferenceNameIndex: func(n types.AuthPreference) string {
-				return n.GetName()
-			},
-		}),
+		store: newStore(
+			types.AuthPreference.Clone,
+			map[authPreferenceIndex]func(types.AuthPreference) string{
+				authPreferenceNameIndex: types.AuthPreference.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.AuthPreference, error) {
 			pref, err := c.GetAuthPreference(ctx)
 			if err != nil {
@@ -282,11 +282,11 @@ func newSessionRecordingConfigCollection(c services.ClusterConfiguration, w type
 	}
 
 	return &collection[types.SessionRecordingConfig, sessionRecordingConfigIndex]{
-		store: newStore(map[sessionRecordingConfigIndex]func(types.SessionRecordingConfig) string{
-			sessionRecordingConfigNameIndex: func(n types.SessionRecordingConfig) string {
-				return n.GetName()
-			},
-		}),
+		store: newStore(
+			types.SessionRecordingConfig.Clone,
+			map[sessionRecordingConfigIndex]func(types.SessionRecordingConfig) string{
+				sessionRecordingConfigNameIndex: types.SessionRecordingConfig.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.SessionRecordingConfig, error) {
 			cfg, err := c.GetSessionRecordingConfig(ctx)
 			if err != nil {

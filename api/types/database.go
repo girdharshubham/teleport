@@ -131,7 +131,7 @@ type Database interface {
 	// AWS IAM roles as database users.
 	SupportAWSIAMRoleARNAsUsers() bool
 	// Copy returns a copy of this database resource.
-	Copy() *DatabaseV3
+	Copy() Database
 	// GetAdminUser returns database privileged user information.
 	GetAdminUser() DatabaseAdminUser
 	// SupportsAutoUsers returns true if this database supports automatic
@@ -626,7 +626,7 @@ func (d *DatabaseV3) String() string {
 }
 
 // Copy returns a copy of this database resource.
-func (d *DatabaseV3) Copy() *DatabaseV3 {
+func (d *DatabaseV3) Copy() Database {
 	return utils.CloneProtoMsg(d)
 }
 

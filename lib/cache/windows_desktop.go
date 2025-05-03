@@ -37,19 +37,19 @@ func newWindowsDesktopServiceCollection(p services.Presence, w types.WatchKind) 
 	}
 
 	return &collection[types.WindowsDesktopService, windowsDesktopServiceIndex]{
-		store: newStore(map[windowsDesktopServiceIndex]func(types.WindowsDesktopService) string{
-			windowsDesktopServiceNameIndex: func(u types.WindowsDesktopService) string {
-				return u.GetName()
-			},
-		}),
+		store: newStore(
+			types.WindowsDesktopService.Clone,
+			map[windowsDesktopServiceIndex]func(types.WindowsDesktopService) string{
+				windowsDesktopServiceNameIndex: types.WindowsDesktopService.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.WindowsDesktopService, error) {
 			return p.GetWindowsDesktopServices(ctx)
 		},
 		headerTransform: func(hdr *types.ResourceHeader) types.WindowsDesktopService {
 			return &types.WindowsDesktopServiceV3{
 				ResourceHeader: types.ResourceHeader{
-					Kind:    types.KindWindowsDesktopService,
-					Version: types.V3,
+					Kind:    hdr.Kind,
+					Version: hdr.Version,
 					Metadata: types.Metadata{
 						Name: hdr.Metadata.Name,
 					},
@@ -167,19 +167,21 @@ func newWindowsDesktopCollection(d services.WindowsDesktops, w types.WatchKind) 
 	}
 
 	return &collection[types.WindowsDesktop, windowsDesktopIndex]{
-		store: newStore(map[windowsDesktopIndex]func(types.WindowsDesktop) string{
-			windowsDesktopNameIndex: func(u types.WindowsDesktop) string {
-				return u.GetHostID() + "/" + u.GetName()
-			},
-		}),
+		store: newStore(
+			types.WindowsDesktop.Copy,
+			map[windowsDesktopIndex]func(types.WindowsDesktop) string{
+				windowsDesktopNameIndex: func(u types.WindowsDesktop) string {
+					return u.GetHostID() + "/" + u.GetName()
+				},
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.WindowsDesktop, error) {
 			return d.GetWindowsDesktops(ctx, types.WindowsDesktopFilter{})
 		},
 		headerTransform: func(hdr *types.ResourceHeader) types.WindowsDesktop {
 			return &types.WindowsDesktopV3{
 				ResourceHeader: types.ResourceHeader{
-					Kind:    types.KindWindowsDesktop,
-					Version: types.V3,
+					Kind:    hdr.Kind,
+					Version: hdr.Version,
 					Metadata: types.Metadata{
 						Name: hdr.Metadata.Name,
 					},

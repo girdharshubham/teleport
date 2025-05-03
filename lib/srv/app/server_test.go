@@ -479,9 +479,9 @@ func TestStart(t *testing.T) {
 
 	// Check that the services.Server sent via heartbeat is correct. For example,
 	// check that the dynamic labels have been evaluated.
-	appFoo := s.appFoo.Copy()
-	appAWS := s.appAWS.Copy()
-	appAWSWithIntegration := s.appAWSWithIntegration.Copy()
+	appFoo := s.appFoo.Copy().(*types.AppV3)
+	appAWS := s.appAWS.Copy().(*types.AppV3)
+	appAWSWithIntegration := s.appAWSWithIntegration.Copy().(*types.AppV3)
 
 	appFoo.SetDynamicLabels(map[string]types.CommandLabel{
 		dynamicLabelName: &types.CommandLabelV2{

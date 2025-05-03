@@ -41,11 +41,13 @@ func newHealthCheckConfigCollection(upstream services.HealthCheckConfigReader, w
 	}
 
 	return &collection[*healthcheckconfigv1.HealthCheckConfig, healthCheckConfigIndex]{
-		store: newStore(map[healthCheckConfigIndex]func(*healthcheckconfigv1.HealthCheckConfig) string{
-			healthCheckConfigNameIndex: func(r *healthcheckconfigv1.HealthCheckConfig) string {
-				return r.GetMetadata().GetName()
-			},
-		}),
+		store: newStore(
+			utils.CloneProtoMsg[*healthcheckconfigv1.HealthCheckConfig],
+			map[healthCheckConfigIndex]func(*healthcheckconfigv1.HealthCheckConfig) string{
+				healthCheckConfigNameIndex: func(r *healthcheckconfigv1.HealthCheckConfig) string {
+					return r.GetMetadata().GetName()
+				},
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]*healthcheckconfigv1.HealthCheckConfig, error) {
 			var out []*healthcheckconfigv1.HealthCheckConfig
 			clientutils.IterateResources(ctx,
@@ -84,7 +86,6 @@ func (c *Cache) ListHealthCheckConfigs(ctx context.Context, pageSize int, nextTo
 		nextToken: func(t *healthcheckconfigv1.HealthCheckConfig) string {
 			return t.GetMetadata().GetName()
 		},
-		clone: utils.CloneProtoMsg[*healthcheckconfigv1.HealthCheckConfig],
 	}
 	out, next, err := lister.list(ctx,
 		pageSize,
@@ -103,7 +104,6 @@ func (c *Cache) GetHealthCheckConfig(ctx context.Context, name string) (*healthc
 		collection:  c.collections.healthCheckConfig,
 		index:       healthCheckConfigNameIndex,
 		upstreamGet: c.Config.HealthCheckConfig.GetHealthCheckConfig,
-		clone:       utils.CloneProtoMsg[*healthcheckconfigv1.HealthCheckConfig],
 	}
 	out, err := getter.get(ctx, name)
 	return out, trace.Wrap(err)

@@ -39,11 +39,13 @@ func newIdentityCenterAccountCollection(ic services.IdentityCenter, w types.Watc
 	}
 
 	return &collection[*identitycenterv1.Account, identityCenterAccountIndex]{
-		store: newStore(map[identityCenterAccountIndex]func(*identitycenterv1.Account) string{
-			identityCenterAccountNameIndex: func(r *identitycenterv1.Account) string {
-				return r.GetMetadata().GetName()
-			},
-		}),
+		store: newStore(
+			utils.CloneProtoMsg[*identitycenterv1.Account],
+			map[identityCenterAccountIndex]func(*identitycenterv1.Account) string{
+				identityCenterAccountNameIndex: func(r *identitycenterv1.Account) string {
+					return r.GetMetadata().GetName()
+				},
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]*identitycenterv1.Account, error) {
 			var pageToken pagination.PageRequestToken
 			var accounts []*identitycenterv1.Account
@@ -146,11 +148,13 @@ func newIdentityCenterAccountAssignmentCollection(ic services.IdentityCenter, w 
 	}
 
 	return &collection[*identitycenterv1.AccountAssignment, identityCenterAccountAssignmentIndex]{
-		store: newStore(map[identityCenterAccountAssignmentIndex]func(*identitycenterv1.AccountAssignment) string{
-			identityCenterAccountAssignmentNameIndex: func(r *identitycenterv1.AccountAssignment) string {
-				return r.GetMetadata().GetName()
-			},
-		}),
+		store: newStore(
+			utils.CloneProtoMsg[*identitycenterv1.AccountAssignment],
+			map[identityCenterAccountAssignmentIndex]func(*identitycenterv1.AccountAssignment) string{
+				identityCenterAccountAssignmentNameIndex: func(r *identitycenterv1.AccountAssignment) string {
+					return r.GetMetadata().GetName()
+				},
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]*identitycenterv1.AccountAssignment, error) {
 			var pageToken pagination.PageRequestToken
 			var accounts []*identitycenterv1.AccountAssignment

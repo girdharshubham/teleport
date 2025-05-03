@@ -320,7 +320,7 @@ type WindowsDesktop interface {
 	// use the size passed by the client over TDP.
 	GetScreenSize() (width, height uint32)
 	// Copy returns a copy of this windows desktop
-	Copy() *WindowsDesktopV3
+	Copy() WindowsDesktop
 	// CloneResource returns a copy of the WindowDesktop as a ResourceWithLabels
 	CloneResource() ResourceWithLabels
 }
@@ -402,7 +402,7 @@ func (d *WindowsDesktopV3) MatchSearch(values []string) bool {
 }
 
 // Copy returns a copy of this windows desktop object.
-func (d *WindowsDesktopV3) Copy() *WindowsDesktopV3 {
+func (d *WindowsDesktopV3) Copy() WindowsDesktop {
 	return utils.CloneProtoMsg(d)
 }
 

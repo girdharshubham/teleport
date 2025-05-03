@@ -112,7 +112,7 @@ func (s *Server) guessPublicAddr(app types.Application) types.Application {
 	if app.GetPublicAddr() != "" {
 		return app
 	}
-	appCopy := app.Copy()
+	appCopy := app.Copy().(*types.AppV3)
 	pubAddr, err := FindPublicAddr(s.c.AccessPoint, app.GetPublicAddr(), app.GetName())
 	if err == nil {
 		appCopy.Spec.PublicAddr = pubAddr

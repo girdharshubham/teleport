@@ -38,18 +38,18 @@ func newDatabaseCollection(p services.Databases, w types.WatchKind) (*collection
 	}
 
 	return &collection[types.Database, databaseIndex]{
-		store: newStore(map[databaseIndex]func(types.Database) string{
-			databaseNameIndex: func(u types.Database) string {
-				return u.GetName()
-			},
-		}),
+		store: newStore(
+			types.Database.Copy,
+			map[databaseIndex]func(types.Database) string{
+				databaseNameIndex: types.Database.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.Database, error) {
 			return p.GetDatabases(ctx)
 		},
 		headerTransform: func(hdr *types.ResourceHeader) types.Database {
 			return &types.DatabaseV3{
-				Kind:    types.KindDatabase,
-				Version: types.V3,
+				Kind:    hdr.Kind,
+				Version: hdr.Version,
 				Metadata: types.Metadata{
 					Name: hdr.Metadata.Name,
 				},
@@ -117,18 +117,20 @@ func newDatabaseServerCollection(p services.Presence, w types.WatchKind) (*colle
 	}
 
 	return &collection[types.DatabaseServer, databaseServerIndex]{
-		store: newStore(map[databaseServerIndex]func(types.DatabaseServer) string{
-			databaseServerNameIndex: func(u types.DatabaseServer) string {
-				return u.GetHostID() + "/" + u.GetName()
-			},
-		}),
+		store: newStore(
+			types.DatabaseServer.Copy,
+			map[databaseServerIndex]func(types.DatabaseServer) string{
+				databaseServerNameIndex: func(u types.DatabaseServer) string {
+					return u.GetHostID() + "/" + u.GetName()
+				},
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.DatabaseServer, error) {
 			return p.GetDatabaseServers(ctx, defaults.Namespace)
 		},
 		headerTransform: func(hdr *types.ResourceHeader) types.DatabaseServer {
 			return &types.DatabaseServerV3{
-				Kind:    types.KindDatabaseServer,
-				Version: types.V3,
+				Kind:    hdr.Kind,
+				Version: hdr.Version,
 				Metadata: types.Metadata{
 					Name: hdr.Metadata.Name,
 				},
@@ -175,11 +177,11 @@ func newDatabaseServiceCollection(p services.Presence, w types.WatchKind) (*coll
 	}
 
 	return &collection[types.DatabaseService, databaseServiceIndex]{
-		store: newStore(map[databaseServiceIndex]func(types.DatabaseService) string{
-			databaseServiceNameIndex: func(u types.DatabaseService) string {
-				return u.GetName()
-			},
-		}),
+		store: newStore(
+			types.DatabaseService.Clone,
+			map[databaseServiceIndex]func(types.DatabaseService) string{
+				databaseServiceNameIndex: types.DatabaseService.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.DatabaseService, error) {
 			resources, err := client.GetResourcesWithFilters(ctx, p, proto.ListResourcesRequest{ResourceType: types.KindDatabaseService})
 			if err != nil {
@@ -200,8 +202,8 @@ func newDatabaseServiceCollection(p services.Presence, w types.WatchKind) (*coll
 		headerTransform: func(hdr *types.ResourceHeader) types.DatabaseService {
 			return &types.DatabaseServiceV1{
 				ResourceHeader: types.ResourceHeader{
-					Kind:    types.KindDatabase,
-					Version: types.V3,
+					Kind:    hdr.Kind,
+					Version: hdr.Version,
 					Metadata: types.Metadata{
 						Name: hdr.Metadata.Name,
 					},

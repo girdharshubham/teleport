@@ -35,18 +35,20 @@ func newKubernetesServerCollection(p services.Presence, w types.WatchKind) (*col
 	}
 
 	return &collection[types.KubeServer, kubeServerIndex]{
-		store: newStore(map[kubeServerIndex]func(types.KubeServer) string{
-			kubeServerNameIndex: func(u types.KubeServer) string {
-				return u.GetHostID() + "/" + u.GetName()
-			},
-		}),
+		store: newStore(
+			types.KubeServer.Copy,
+			map[kubeServerIndex]func(types.KubeServer) string{
+				kubeServerNameIndex: func(u types.KubeServer) string {
+					return u.GetHostID() + "/" + u.GetName()
+				},
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.KubeServer, error) {
 			return p.GetKubernetesServers(ctx)
 		},
 		headerTransform: func(hdr *types.ResourceHeader) types.KubeServer {
 			return &types.KubernetesServerV3{
-				Kind:    types.KindKubeServer,
-				Version: types.V3,
+				Kind:    hdr.Kind,
+				Version: hdr.Version,
 				Metadata: types.Metadata{
 					Name: hdr.Metadata.Name,
 				},
@@ -93,18 +95,18 @@ func newKubernetesClusterCollection(k services.Kubernetes, w types.WatchKind) (*
 	}
 
 	return &collection[types.KubeCluster, kubeClusterIndex]{
-		store: newStore(map[kubeClusterIndex]func(types.KubeCluster) string{
-			kubeClusterNameIndex: func(u types.KubeCluster) string {
-				return u.GetName()
-			},
-		}),
+		store: newStore(
+			types.KubeCluster.Copy,
+			map[kubeClusterIndex]func(types.KubeCluster) string{
+				kubeClusterNameIndex: types.KubeCluster.GetName,
+			}),
 		fetcher: func(ctx context.Context, loadSecrets bool) ([]types.KubeCluster, error) {
 			return k.GetKubernetesClusters(ctx)
 		},
 		headerTransform: func(hdr *types.ResourceHeader) types.KubeCluster {
 			return &types.KubernetesClusterV3{
-				Kind:    types.KindKubernetesCluster,
-				Version: types.V3,
+				Kind:    hdr.Kind,
+				Version: hdr.Version,
 				Metadata: types.Metadata{
 					Name: hdr.Metadata.Name,
 				},

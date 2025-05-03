@@ -698,7 +698,7 @@ func (s *Server) getProxiedDatabase(name string) (types.Database, error) {
 // copyDatabaseWithUpdatedLabelsLocked will inject updated dynamic and cloud labels into
 // a database object.
 // The caller must invoke an RLock on `s.mu` before calling this function.
-func (s *Server) copyDatabaseWithUpdatedLabelsLocked(database types.Database) *types.DatabaseV3 {
+func (s *Server) copyDatabaseWithUpdatedLabelsLocked(database types.Database) types.Database {
 	// create a copy of the database to modify.
 	copy := database.Copy()
 
@@ -779,7 +779,7 @@ func (s *Server) getServerInfo(ctx context.Context, database types.Database) (*t
 		Hostname: s.cfg.Hostname,
 		HostID:   s.cfg.HostID,
 		Rotation: s.getRotationState(),
-		Database: copy,
+		Database: copy.(*types.DatabaseV3),
 		ProxyIDs: s.cfg.ConnectedProxyGetter.GetProxyIDs(),
 	})
 	return server, trace.Wrap(err)
