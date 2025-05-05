@@ -1261,7 +1261,7 @@ type DTAutoEnrollFunc func(context.Context, devicepb.DeviceTrustServiceClient) (
 type TeleportClient struct {
 	Config
 	exitStatus int
-	statusMu   sync.RWMutex
+	statusMu   sync.Mutex
 
 	localAgent *LocalKeyAgent
 
@@ -1331,8 +1331,8 @@ func NewClient(c *Config) (tc *TeleportClient, err error) {
 
 // ExitStatus returns the exit status of the most recent ssh command.
 func (tc *TeleportClient) ExitStatus() int {
-	tc.statusMu.RLock()
-	defer tc.statusMu.RUnlock()
+	tc.statusMu.Lock()
+	defer tc.statusMu.Unlock()
 	return tc.exitStatus
 }
 
