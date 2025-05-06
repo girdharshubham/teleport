@@ -22,16 +22,19 @@ import Flex from 'design/Flex';
 import { SyncAlt } from 'design/Icon';
 import { P3 } from 'design/Text';
 
-export function SyncStamp({ date }: { date: Date }) {
+export function SyncStamp({ date }: { date?: Date }) {
+  let content = 'not recorded yet';
+
+  if (date && date.getTime() >= 0) {
+    content = formatDistanceStrict(new Date(date), new Date(), {
+      addSuffix: true,
+    });
+  }
+
   return (
     <Flex data-testid="sync">
       <SyncAlt color="text.muted" size="small" mr={1} />
-      <P3 color="text.muted">
-        Last Sync:{' '}
-        {formatDistanceStrict(new Date(date), new Date(), {
-          addSuffix: true,
-        })}
-      </P3>
+      <P3 color="text.muted">Last Sync: {content}</P3>
     </Flex>
   );
 }
