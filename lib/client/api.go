@@ -1329,14 +1329,16 @@ func NewClient(c *Config) (tc *TeleportClient, err error) {
 	return tc, nil
 }
 
-// ExitStatus returns the exit status of the most recent ssh command.
+// ExitStatus returns the exit status of the most recent SSH command. It is the
+// caller's responsibility to ensure the command has finished before checking
+// the exit status.
 func (tc *TeleportClient) ExitStatus() int {
 	tc.statusMu.Lock()
 	defer tc.statusMu.Unlock()
 	return tc.exitStatus
 }
 
-// SetExitStatus sets the exit status of the most recent ssh command.
+// SetExitStatus sets the exit status of the most recent SSH command.
 func (tc *TeleportClient) SetExitStatus(status int) {
 	tc.statusMu.Lock()
 	defer tc.statusMu.Unlock()
