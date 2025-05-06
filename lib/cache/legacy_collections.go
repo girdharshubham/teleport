@@ -34,7 +34,6 @@ import (
 	userspb "github.com/gravitational/teleport/api/gen/proto/go/teleport/users/v1"
 	usertasksv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/usertasks/v1"
 	"github.com/gravitational/teleport/api/types"
-	"github.com/gravitational/teleport/api/types/discoveryconfig"
 	"github.com/gravitational/teleport/api/types/secreports"
 	"github.com/gravitational/teleport/lib/defaults"
 	"github.com/gravitational/teleport/lib/services"
@@ -99,7 +98,6 @@ type legacyCollections struct {
 	secReports                         collectionReader[services.SecurityReportGetter]
 	secReportsStates                   collectionReader[services.SecurityReportStateGetter]
 	databaseObjects                    collectionReader[services.DatabaseObjectsGetter]
-	discoveryConfigs                   collectionReader[services.DiscoveryConfigsGetter]
 	kubeWaitingContainers              collectionReader[kubernetesWaitingContainerGetter]
 	staticHostUsers                    collectionReader[staticHostUserGetter]
 	networkRestrictions                collectionReader[networkRestrictionGetter]
@@ -149,12 +147,6 @@ func setupLegacyCollections(c *Cache, watches []types.WatchKind) (*legacyCollect
 				watch: watch,
 			}
 			collections.byKind[resourceKind] = collections.dynamicWindowsDesktops
-		case types.KindDiscoveryConfig:
-			if c.DiscoveryConfigs == nil {
-				return nil, trace.BadParameter("missing parameter DiscoveryConfigs")
-			}
-			collections.discoveryConfigs = &genericCollection[*discoveryconfig.DiscoveryConfig, services.DiscoveryConfigsGetter, discoveryConfigExecutor]{cache: c, watch: watch}
-			collections.byKind[resourceKind] = collections.discoveryConfigs
 		case types.KindHeadlessAuthentication:
 			// For headless authentications, we need only process events. We don't need to keep the cache up to date.
 			collections.byKind[resourceKind] = &genericCollection[*types.HeadlessAuthentication, noReader, noopExecutor]{cache: c, watch: watch}
@@ -600,53 +592,6 @@ type collectionReader[R any] interface {
 type resourceGetter interface {
 	ListResources(ctx context.Context, req proto.ListResourcesRequest) (*types.ListResourcesResponse, error)
 }
-
-type discoveryConfigExecutor struct{}
-
-func (discoveryConfigExecutor) getAll(ctx context.Context, cache *Cache, loadSecrets bool) ([]*discoveryconfig.DiscoveryConfig, error) {
-	var discoveryConfigs []*discoveryconfig.DiscoveryConfig
-	var nextToken string
-	for {
-		var page []*discoveryconfig.DiscoveryConfig
-		var err error
-
-		page, nextToken, err = cache.DiscoveryConfigs.ListDiscoveryConfigs(ctx, 0 /* default page size */, nextToken)
-		if err != nil {
-			return nil, trace.Wrap(err)
-		}
-
-		discoveryConfigs = append(discoveryConfigs, page...)
-
-		if nextToken == "" {
-			break
-		}
-	}
-	return discoveryConfigs, nil
-}
-
-func (discoveryConfigExecutor) upsert(ctx context.Context, cache *Cache, resource *discoveryconfig.DiscoveryConfig) error {
-	_, err := cache.discoveryConfigsCache.UpsertDiscoveryConfig(ctx, resource)
-	return trace.Wrap(err)
-}
-
-func (discoveryConfigExecutor) deleteAll(ctx context.Context, cache *Cache) error {
-	return cache.discoveryConfigsCache.DeleteAllDiscoveryConfigs(ctx)
-}
-
-func (discoveryConfigExecutor) delete(ctx context.Context, cache *Cache, resource types.Resource) error {
-	return cache.discoveryConfigsCache.DeleteDiscoveryConfig(ctx, resource.GetName())
-}
-
-func (discoveryConfigExecutor) isSingleton() bool { return false }
-
-func (discoveryConfigExecutor) getReader(cache *Cache, cacheOK bool) services.DiscoveryConfigsGetter {
-	if cacheOK {
-		return cache.discoveryConfigsCache
-	}
-	return cache.Config.DiscoveryConfigs
-}
-
-var _ executor[*discoveryconfig.DiscoveryConfig, services.DiscoveryConfigsGetter] = discoveryConfigExecutor{}
 
 type auditQueryExecutor struct{}
 

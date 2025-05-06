@@ -45,7 +45,6 @@ import (
 	"github.com/gravitational/teleport/api/internalutils/stream"
 	apitracing "github.com/gravitational/teleport/api/observability/tracing"
 	"github.com/gravitational/teleport/api/types"
-	"github.com/gravitational/teleport/api/types/discoveryconfig"
 	"github.com/gravitational/teleport/api/types/secreports"
 	apiutils "github.com/gravitational/teleport/api/utils"
 	"github.com/gravitational/teleport/api/utils/retryutils"
@@ -506,7 +505,6 @@ type Cache struct {
 	databaseObjectsCache         *local.DatabaseObjectService
 	dynamicWindowsDesktopsCache  services.DynamicWindowsDesktops
 	userGroupsCache              services.UserGroups
-	discoveryConfigsCache        services.DiscoveryConfigs
 	headlessAuthenticationsCache services.HeadlessAuthenticationService
 	secReportsCache              services.SecReports
 	eventsFanout                 *services.FanoutV2
@@ -914,12 +912,6 @@ func New(config Config) (*Cache, error) {
 		return nil, trace.Wrap(err)
 	}
 
-	discoveryConfigsCache, err := local.NewDiscoveryConfigService(config.Backend)
-	if err != nil {
-		cancel()
-		return nil, trace.Wrap(err)
-	}
-
 	secReportsCache, err := local.NewSecReportsService(config.Backend, config.Clock)
 	if err != nil {
 		cancel()
@@ -1002,7 +994,6 @@ func New(config Config) (*Cache, error) {
 		restrictionsCache:            local.NewRestrictionsService(config.Backend),
 		dynamicWindowsDesktopsCache:  dynamicDesktopsService,
 		userGroupsCache:              userGroupsCache,
-		discoveryConfigsCache:        discoveryConfigsCache,
 		headlessAuthenticationsCache: identityService,
 		secReportsCache:              secReportsCache,
 		databaseObjectsCache:         databaseObjectsCache,
@@ -1884,32 +1875,6 @@ func (c *Cache) ListDynamicWindowsDesktops(ctx context.Context, pageSize int, ne
 	}
 	defer rg.Release()
 	return rg.reader.ListDynamicWindowsDesktops(ctx, pageSize, nextPage)
-}
-
-// ListDiscoveryConfigs returns a paginated list of all DiscoveryConfig resources.
-func (c *Cache) ListDiscoveryConfigs(ctx context.Context, pageSize int, nextKey string) ([]*discoveryconfig.DiscoveryConfig, string, error) {
-	ctx, span := c.Tracer.Start(ctx, "cache/ListDiscoveryConfigs")
-	defer span.End()
-
-	rg, err := readLegacyCollectionCache(c, c.legacyCacheCollections.discoveryConfigs)
-	if err != nil {
-		return nil, "", trace.Wrap(err)
-	}
-	defer rg.Release()
-	return rg.reader.ListDiscoveryConfigs(ctx, pageSize, nextKey)
-}
-
-// GetDiscoveryConfig returns the specified DiscoveryConfig resource.
-func (c *Cache) GetDiscoveryConfig(ctx context.Context, name string) (*discoveryconfig.DiscoveryConfig, error) {
-	ctx, span := c.Tracer.Start(ctx, "cache/GetDiscoveryConfig")
-	defer span.End()
-
-	rg, err := readLegacyCollectionCache(c, c.legacyCacheCollections.discoveryConfigs)
-	if err != nil {
-		return nil, trace.Wrap(err)
-	}
-	defer rg.Release()
-	return rg.reader.GetDiscoveryConfig(ctx, name)
 }
 
 // GetSecurityAuditQuery returns the specified audit query resource.

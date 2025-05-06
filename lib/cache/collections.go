@@ -33,6 +33,7 @@ import (
 	workloadidentityv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/workloadidentity/v1"
 	"github.com/gravitational/teleport/api/types"
 	"github.com/gravitational/teleport/api/types/accesslist"
+	"github.com/gravitational/teleport/api/types/discoveryconfig"
 	"github.com/gravitational/teleport/api/types/userloginstate"
 )
 
@@ -117,6 +118,7 @@ type collections struct {
 	remoteClusters                   *collection[types.RemoteCluster, remoteClusterIndex]
 	userTasks                        *collection[*usertasksv1.UserTask, userTaskIndex]
 	userLoginStates                  *collection[*userloginstate.UserLoginState, userLoginStateIndex]
+	discoveryConfigs                 *collection[*discoveryconfig.DiscoveryConfig, discoveryConfigIndex]
 }
 
 // setupCollections ensures that the appropriate [collection] is
@@ -591,6 +593,14 @@ func setupCollections(c Config) (*collections, error) {
 
 			out.userLoginStates = collect
 			out.byKind[resourceKind] = out.userLoginStates
+		case types.KindDiscoveryConfig:
+			collect, err := newDiscoveryConfigCollection(c.DiscoveryConfigs, watch)
+			if err != nil {
+				return nil, trace.Wrap(err)
+			}
+
+			out.discoveryConfigs = collect
+			out.byKind[resourceKind] = out.discoveryConfigs
 		}
 	}
 
