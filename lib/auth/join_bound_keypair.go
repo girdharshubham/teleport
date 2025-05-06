@@ -82,7 +82,7 @@ func (a *Server) CreateBoundKeypairToken(ctx context.Context, token types.Provis
 
 	tokenV2, ok := token.(*types.ProvisionTokenV2)
 	if !ok {
-		return trace.BadParameter("%v join method requires ProvisionTokenV2", types.JoinMethodOracle)
+		return trace.BadParameter("%v join method requires ProvisionTokenV2", types.JoinMethodBoundKeypair)
 	}
 
 	spec := tokenV2.Spec.BoundKeypair
