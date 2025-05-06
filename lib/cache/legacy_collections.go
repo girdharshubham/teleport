@@ -27,9 +27,7 @@ import (
 
 	"github.com/gravitational/teleport/api/client/proto"
 	dbobjectv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/dbobject/v1"
-	identitycenterv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/identitycenter/v1"
 	kubewaitingcontainerpb "github.com/gravitational/teleport/api/gen/proto/go/teleport/kubewaitingcontainer/v1"
-	provisioningv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/provisioning/v1"
 	userprovisioningpb "github.com/gravitational/teleport/api/gen/proto/go/teleport/userprovisioning/v2"
 	userspb "github.com/gravitational/teleport/api/gen/proto/go/teleport/users/v1"
 	usertasksv1 "github.com/gravitational/teleport/api/gen/proto/go/teleport/usertasks/v1"
@@ -95,18 +93,16 @@ type legacyCollections struct {
 	// byKind is a map of registered collections by resource Kind/SubKind
 	byKind map[resourceKind]legacyCollection
 
-	auditQueries                       collectionReader[services.SecurityAuditQueryGetter]
-	secReports                         collectionReader[services.SecurityReportGetter]
-	secReportsStates                   collectionReader[services.SecurityReportStateGetter]
-	databaseObjects                    collectionReader[services.DatabaseObjectsGetter]
-	discoveryConfigs                   collectionReader[services.DiscoveryConfigsGetter]
-	kubeWaitingContainers              collectionReader[kubernetesWaitingContainerGetter]
-	staticHostUsers                    collectionReader[staticHostUserGetter]
-	networkRestrictions                collectionReader[networkRestrictionGetter]
-	dynamicWindowsDesktops             collectionReader[dynamicWindowsDesktopsGetter]
-	provisioningStates                 collectionReader[provisioningStateGetter]
-	identityCenterPrincipalAssignments collectionReader[identityCenterPrincipalAssignmentGetter]
-	gitServers                         collectionReader[services.GitServerGetter]
+	auditQueries           collectionReader[services.SecurityAuditQueryGetter]
+	secReports             collectionReader[services.SecurityReportGetter]
+	secReportsStates       collectionReader[services.SecurityReportStateGetter]
+	databaseObjects        collectionReader[services.DatabaseObjectsGetter]
+	discoveryConfigs       collectionReader[services.DiscoveryConfigsGetter]
+	kubeWaitingContainers  collectionReader[kubernetesWaitingContainerGetter]
+	staticHostUsers        collectionReader[staticHostUserGetter]
+	networkRestrictions    collectionReader[networkRestrictionGetter]
+	dynamicWindowsDesktops collectionReader[dynamicWindowsDesktopsGetter]
+	gitServers             collectionReader[services.GitServerGetter]
 }
 
 // setupLegacyCollections returns a registry of legacyCollections.
@@ -194,28 +190,6 @@ func setupLegacyCollections(c *Cache, watches []types.WatchKind) (*legacyCollect
 				watch: watch,
 			}
 			collections.byKind[resourceKind] = collections.staticHostUsers
-		case types.KindProvisioningPrincipalState:
-			if c.ProvisioningStates == nil {
-				return nil, trace.BadParameter("missing parameter KindProvisioningState")
-			}
-			collections.provisioningStates = &genericCollection[*provisioningv1.PrincipalState, provisioningStateGetter, provisioningStateExecutor]{
-				cache: c,
-				watch: watch,
-			}
-			collections.byKind[resourceKind] = collections.provisioningStates
-		case types.KindIdentityCenterPrincipalAssignment:
-			if c.IdentityCenter == nil {
-				return nil, trace.BadParameter("missing parameter IdentityCenter")
-			}
-			collections.identityCenterPrincipalAssignments = &genericCollection[
-				*identitycenterv1.PrincipalAssignment,
-				identityCenterPrincipalAssignmentGetter,
-				identityCenterPrincipalAssignmentExecutor,
-			]{
-				cache: c,
-				watch: watch,
-			}
-			collections.byKind[resourceKind] = collections.identityCenterPrincipalAssignments
 		case types.KindGitServer:
 			if c.GitServers == nil {
 				return nil, trace.BadParameter("missing parameter GitServers")
