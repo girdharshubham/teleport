@@ -1,0 +1,42 @@
+/*
+ * Teleport
+ * Copyright (C) 2025  Gravitational, Inc.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package seq
+
+import "iter"
+
+// Collect aggregates the contents of an iter.Seq into a slice.
+func Collect[T any](seq iter.Seq[T]) []T {
+	var out []T
+	for item := range seq {
+		out = append(out, item)
+	}
+
+	return out
+}
+
+// Slice converts a slice into an iter.Seq.
+func Slice[T any, S ~[]T](items S) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for _, item := range items {
+			if !yield(item) {
+				return
+			}
+		}
+	}
+}
