@@ -21,22 +21,27 @@ package clickhouse
 import (
 	"bufio"
 	"bytes"
+	"cmp"
 	"compress/flate"
 	"compress/gzip"
 	"context"
 	"encoding/hex"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/andybalholm/brotli"
 	"github.com/gravitational/trace"
+	"golang.org/x/net/http/httpproxy"
 
 	"github.com/gravitational/teleport"
+	"github.com/gravitational/teleport/api/types"
 	"github.com/gravitational/teleport/lib/defaults"
 	"github.com/gravitational/teleport/lib/srv/db/common"
+	"github.com/gravitational/teleport/lib/srv/db/endpoints"
 	"github.com/gravitational/teleport/lib/utils"
 )
 
@@ -170,13 +175,13 @@ func (e *Engine) writeResp(resp *http.Response) error {
 }
 
 func (e *Engine) rewriteRequest(req *http.Request, sessionCtx *common.Session) error {
-	uri, err := url.Parse(sessionCtx.Database.GetURI())
+	u, err := getURL(sessionCtx.Database)
 	if err != nil {
 		return trace.Wrap(err)
 	}
 
-	req.URL.Scheme = "https"
-	req.URL.Host = uri.Host
+	req.URL.Scheme = u.Scheme
+	req.URL.Host = u.Host
 
 	// Delete Headers set by a ClickHouse client.
 	req.Header.Del("Authorization")
@@ -185,7 +190,6 @@ func (e *Engine) rewriteRequest(req *http.Request, sessionCtx *common.Session) e
 	req.Header.Set(headerClickHouseSSLAuth, enableVal)
 	req.Header.Set(headerClickHouseUser, sessionCtx.DatabaseUser)
 	return nil
-
 }
 
 func (e *Engine) sendErrorHTTP(err error) {
@@ -217,4 +221,41 @@ func (e *Engine) getTransport(ctx context.Context) (*http.Transport, error) {
 
 	transport.TLSClientConfig = tlsConfig
 	return transport, nil
+}
+
+func getURL(db types.Database) (*url.URL, error) {
+	u, err := url.Parse(db.GetURI())
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+	u.Scheme = "https"
+	return u, nil
+}
+
+// NewHTTPEndpointsResolver resolves a ClickHouse HTTP endpoint from DB URI.
+func NewHTTPEndpointsResolver(_ context.Context, db types.Database, _ endpoints.ResolverBuilderConfig) (endpoints.Resolver, error) {
+	dbURL, err := getURL(db)
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	// the engine uses a default transport that respects proxy env vars
+	proxyFunc := httpproxy.FromEnvironment().ProxyFunc()
+	proxyURL, err := proxyFunc(dbURL)
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	defaultPort := "443"
+	if proxyURL != nil {
+		dbURL = proxyURL
+		// http.ProxyFromEnvironment defaults to HTTP port.
+		defaultPort = "80"
+	}
+	host := dbURL.Hostname()
+	port := cmp.Or(dbURL.Port(), defaultPort)
+	hostPort := net.JoinHostPort(host, port)
+	return endpoints.ResolverFn(func(ctx context.Context) ([]string, error) {
+		return []string{hostPort}, nil
+	}), nil
 }
