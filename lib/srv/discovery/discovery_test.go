@@ -927,6 +927,7 @@ func TestDiscoveryServer(t *testing.T) {
 
 			fakeConfigProvider := mocks.AWSConfigProvider{
 				OIDCIntegrationClient: tlsServer.Auth(),
+				IntegrationGetter:     tlsServer.Auth(),
 			}
 			server, err := New(authz.ContextWithUser(context.Background(), identity.I), &Config{
 				GetEC2Client: func(ctx context.Context, region string, opts ...awsconfig.OptionsFn) (ec2.DescribeInstancesAPIClient, error) {
@@ -1666,6 +1667,7 @@ func TestDiscoveryInCloudKube(t *testing.T) {
 				AWSConfigProvider: mocks.AWSConfigProvider{
 					STSClient:             &mocks.STSClient{},
 					OIDCIntegrationClient: newFakeAccessPoint(),
+					IntegrationGetter:     newFakeAccessPoint(),
 				},
 				eksClusters: newPopulatedEKSMock().clusters,
 			}
@@ -2583,6 +2585,7 @@ func TestDiscoveryDatabase(t *testing.T) {
 			accessPoint := getDiscoveryAccessPoint(tlsServer.Auth(), authClient)
 			fakeConfigProvider := &mocks.AWSConfigProvider{
 				OIDCIntegrationClient: accessPoint,
+				IntegrationGetter:     accessPoint,
 			}
 			dbFetcherFactory, err := db.NewAWSFetcherFactory(db.AWSFetcherFactoryConfig{
 				AWSConfigProvider: fakeConfigProvider,

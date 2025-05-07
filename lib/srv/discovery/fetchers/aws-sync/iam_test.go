@@ -73,6 +73,10 @@ func TestAWSIAMPollSAMLProviders(t *testing.T) {
 					Integration: awsOIDCIntegration,
 					Token:       "fake-oidc-token",
 				},
+				IntegrationGetter: &mocks.FakeOIDCIntegrationClient{
+					Integration: awsOIDCIntegration,
+					Token:       "fake-oidc-token",
+				},
 			},
 			Regions:     regions,
 			Integration: awsOIDCIntegration.GetName(),
@@ -208,6 +212,10 @@ func TestAWSIAMPollOIDCProviders(t *testing.T) {
 			AccountID: accountID,
 			AWSConfigProvider: &mocks.AWSConfigProvider{
 				OIDCIntegrationClient: &mocks.FakeOIDCIntegrationClient{
+					Integration: awsOIDCIntegration,
+					Token:       "fake-oidc-token",
+				},
+				IntegrationGetter: &mocks.FakeOIDCIntegrationClient{
 					Integration: awsOIDCIntegration,
 					Token:       "fake-oidc-token",
 				},

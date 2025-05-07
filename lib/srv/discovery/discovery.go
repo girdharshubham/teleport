@@ -248,7 +248,7 @@ kubernetes matchers are present.`)
 	if c.AWSConfigProvider == nil {
 		provider, err := awsconfig.NewCache(
 			awsconfig.WithDefaults(
-				awsconfig.WithOIDCIntegrationClient(c.AccessPoint),
+				awsconfig.WithOIDCIntegrationClient(c.AccessPoint, c.AccessPoint),
 			),
 		)
 		if err != nil {
@@ -1117,7 +1117,7 @@ func (s *Server) handleEC2RemoteInstallation(instances *server.EC2Instances) err
 	// TODO(gavin): support assume_role_arn for ec2.
 	ssmClient, err := s.GetSSMClient(s.ctx,
 		instances.Region,
-		awsconfig.WithCredentialsMaybeIntegration(instances.Integration),
+		awsconfig.WithCredentialsMaybeIntegration(awsconfig.IntegrationMetadata{Name: instances.Integration}),
 	)
 	if err != nil {
 		return trace.Wrap(err)

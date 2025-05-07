@@ -127,6 +127,7 @@ import (
 	"github.com/gravitational/teleport/lib/events/pgevents"
 	"github.com/gravitational/teleport/lib/events/s3sessions"
 	"github.com/gravitational/teleport/lib/httplib"
+	"github.com/gravitational/teleport/lib/integrations/awsra"
 	"github.com/gravitational/teleport/lib/integrations/externalauditstorage"
 	"github.com/gravitational/teleport/lib/inventory"
 	"github.com/gravitational/teleport/lib/joinserver"
@@ -4879,6 +4880,11 @@ func (process *TeleportProcess) initProxyEndpoint(conn *Connector) error {
 			return trace.Wrap(err)
 		}
 
+		rolesAnywhereTLSCA, err := process.awsRolesAnywhereTLSCA(conn.Client, clusterName)
+		if err != nil {
+			return trace.Wrap(err)
+		}
+
 		connectionsHandler, err := app.NewConnectionsHandler(process.GracefulExitContext(), &app.ConnectionsHandlerConfig{
 			Clock:             process.Clock,
 			DataDir:           cfg.DataDir,
@@ -4892,7 +4898,8 @@ func (process *TeleportProcess) initProxyEndpoint(conn *Connector) error {
 			CipherSuites:      cfg.CipherSuites,
 			ServiceComponent:  teleport.ComponentWebProxy,
 			AWSConfigOptions: []awsconfig.OptionsFn{
-				awsconfig.WithOIDCIntegrationClient(conn.Client),
+				awsconfig.WithOIDCIntegrationClient(conn.Client, conn.Client),
+				awsconfig.WithRolesAnywhereIntegrationClient(conn.Client, rolesAnywhereTLSCA, awsra.GenerateCredentials),
 			},
 		})
 		if err != nil {
@@ -5624,6 +5631,28 @@ func (process *TeleportProcess) initProxyEndpoint(conn *Connector) error {
 	}
 
 	return nil
+}
+
+func (process *TeleportProcess) awsRolesAnywhereTLSCA(client *authclient.Client, clusterName string) (*tlsca.CertAuthority, error) {
+	awsRACA, err := client.GetCertAuthority(process.GracefulExitContext(), types.CertAuthID{
+		Type:       types.AWSRACA,
+		DomainName: clusterName,
+	}, true)
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	tlsCert, tlsSigner, err := process.localAuth.GetKeyStore().GetTLSCertAndSigner(process.GracefulExitContext(), awsRACA)
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	tlsCA, err := tlsca.FromCertAndSigner(tlsCert, tlsSigner)
+	if err != nil {
+		return nil, trace.Wrap(err)
+	}
+
+	return tlsCA, nil
 }
 
 func (process *TeleportProcess) initMinimalReverseTunnel(listeners *proxyListeners, tlsConfigWeb *tls.Config, cfg *servicecfg.Config, webConfig web.Config) (*web.Server, error) {

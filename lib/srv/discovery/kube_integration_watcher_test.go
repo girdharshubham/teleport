@@ -168,6 +168,7 @@ func TestDiscoveryKubeIntegrationEKS(t *testing.T) {
 
 	fakeConfigProvider := mocks.AWSConfigProvider{
 		OIDCIntegrationClient: tlsServer.Auth(),
+		IntegrationGetter:     tlsServer.Auth(),
 	}
 
 	testEKSClusters := []ekstypes.Cluster{

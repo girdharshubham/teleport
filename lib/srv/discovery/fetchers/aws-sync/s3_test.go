@@ -181,6 +181,10 @@ func TestPollAWSS3(t *testing.T) {
 							Integration: awsOIDCIntegration,
 							Token:       "fake-oidc-token",
 						},
+						IntegrationGetter: &mocks.FakeOIDCIntegrationClient{
+							Integration: awsOIDCIntegration,
+							Token:       "fake-oidc-token",
+						},
 					},
 					AccountID:   accountID,
 					Regions:     regions,

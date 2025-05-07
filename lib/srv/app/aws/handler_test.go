@@ -272,6 +272,10 @@ func TestAWSSignerHandler(t *testing.T) {
 					Integration: awsOIDCIntegration,
 					Token:       "fake-oidc-token",
 				},
+				IntegrationGetter: &mocks.FakeOIDCIntegrationClient{
+					Integration: awsOIDCIntegration,
+					Token:       "fake-oidc-token",
+				},
 			},
 			wantHost:            "s3.us-west-2.amazonaws.com",
 			wantAuthCredKeyID:   "FAKEACCESSKEYID",

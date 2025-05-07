@@ -30,6 +30,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/gravitational/teleport/api/types"
+	"github.com/gravitational/teleport/lib/integrations/awsra"
+	"github.com/gravitational/teleport/lib/tlsca"
 )
 
 type mockAssumeRoleAPIClient struct{}
@@ -111,11 +113,11 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		return &mockAssumeRoleAPIClient{}
 	}
 
-	t.Run("without an integration client, must return missing credential provider error", func(t *testing.T) {
+	t.Run("without an integration client, must return missing integration getter error", func(t *testing.T) {
 		ctx := context.Background()
-		_, err := provider.GetConfig(ctx, dummyRegion, WithCredentialsMaybeIntegration(dummyIntegration))
+		_, err := provider.GetConfig(ctx, dummyRegion, WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}))
 		require.True(t, trace.IsBadParameter(err), "unexpected error: %v", err)
-		require.ErrorContains(t, err, "missing AWS OIDC integration client")
+		require.ErrorContains(t, err, "missing integration getter")
 	})
 
 	t.Run("with an integration client, must return integration fetch error", func(t *testing.T) {
@@ -126,8 +128,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 			return nil, trace.NotFound("integration not found")
 		}
 		_, err := provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(dummyIntegration),
-			WithOIDCIntegrationClient(&fakeIntegrationClt),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}),
+			WithOIDCIntegrationClient(&fakeIntegrationClt, &fakeIntegrationClt),
 			WithSTSClientProvider(stsClt),
 		)
 		require.Error(t, err)
@@ -150,8 +152,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 			return azureIntegration, nil
 		}
 		_, err = provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(dummyIntegration),
-			WithOIDCIntegrationClient(&fakeIntegrationClt),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}),
+			WithOIDCIntegrationClient(&fakeIntegrationClt, &fakeIntegrationClt),
 			WithSTSClientProvider(stsClt),
 		)
 		require.Error(t, err)
@@ -165,8 +167,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 			return "", trace.BadParameter("failed to generate OIDC token")
 		}
 		_, err = provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(dummyIntegration),
-			WithOIDCIntegrationClient(&fakeIntegrationClt),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}),
+			WithOIDCIntegrationClient(&fakeIntegrationClt, &fakeIntegrationClt),
 			WithSTSClientProvider(stsClt),
 		)
 		require.Error(t, err)
@@ -177,8 +179,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		ctx := context.Background()
 
 		cfg, err := provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(dummyIntegration),
-			WithOIDCIntegrationClient(&fakeIntegrationClt),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}),
+			WithOIDCIntegrationClient(&fakeIntegrationClt, &fakeIntegrationClt),
 			WithSTSClientProvider(stsClt),
 		)
 		require.NoError(t, err)
@@ -191,8 +193,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		ctx := context.Background()
 
 		cfg, err := provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(dummyIntegration),
-			WithOIDCIntegrationClient(&fakeIntegrationClt),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}),
+			WithOIDCIntegrationClient(&fakeIntegrationClt, &fakeIntegrationClt),
 			WithAssumeRole("roleA", "abc123"),
 			WithSTSClientProvider(stsClt),
 		)
@@ -206,8 +208,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 	t.Run("with an integration credential provider assuming a role, must limit role chain length", func(t *testing.T) {
 		ctx := context.Background()
 		_, err := provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(dummyIntegration),
-			WithOIDCIntegrationClient(&fakeIntegrationClt),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{Name: dummyIntegration}),
+			WithOIDCIntegrationClient(&fakeIntegrationClt, &fakeIntegrationClt),
 			WithAssumeRole("roleA", "abc123"),
 			WithAssumeRole("roleB", "abc123"),
 			WithAssumeRole("roleC", "abc123"),
@@ -221,8 +223,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		ctx := context.Background()
 
 		_, err := provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(""),
-			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{}),
+			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}, &fakeOIDCIntegrationClient{unauth: true}),
 		)
 		require.NoError(t, err)
 	})
@@ -232,7 +234,7 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 
 		_, err := provider.GetConfig(ctx, dummyRegion,
 			WithAmbientCredentials(),
-			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}),
+			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}, &fakeOIDCIntegrationClient{unauth: true}),
 		)
 		require.NoError(t, err)
 	})
@@ -241,7 +243,7 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		ctx := context.Background()
 
 		_, err := provider.GetConfig(ctx, dummyRegion,
-			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}),
+			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}, &fakeOIDCIntegrationClient{unauth: true}),
 		)
 		require.Error(t, err)
 		require.ErrorContains(t, err, "missing credentials source")
@@ -251,8 +253,8 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		ctx := context.Background()
 
 		baseCfg, err := provider.GetConfig(ctx, dummyRegion,
-			WithCredentialsMaybeIntegration(""),
-			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}),
+			WithCredentialsMaybeIntegration(IntegrationMetadata{}),
+			WithOIDCIntegrationClient(&fakeOIDCIntegrationClient{unauth: true}, &fakeOIDCIntegrationClient{unauth: true}),
 		)
 		require.NoError(t, err)
 
@@ -268,6 +270,60 @@ func testGetConfigIntegration(t *testing.T, provider Provider) {
 		require.Equal(t, "role: roleA, externalID: abc123", creds.AccessKeyID)
 		require.Equal(t, "fake-session-token", creds.SessionToken)
 	})
+
+	t.Run("with a Roles Anywhere integration", func(t *testing.T) {
+		ctx := context.Background()
+
+		fakeIntegrationClt := fakeIntegrationGetter{
+			getIntegrationFn: func(context.Context, string) (types.Integration, error) {
+				awsRAIntegration, err := types.NewIntegrationAWSRA(
+					types.Metadata{Name: "integration-test"},
+					&types.AWSRAIntegrationSpecV1{
+						TrustAnchorARN: "arn:aws:rolesanywhere:eu-west-2:123456789012:trust-anchor/12345678-1234-1234-1234-123456789012",
+					},
+				)
+				require.NoError(t, err)
+				return awsRAIntegration, nil
+			},
+		}
+
+		credentialGenerator := func(ctx context.Context, req awsra.GenerateCredentialsRequest) (*awsra.Credentials, error) {
+			return &awsra.Credentials{
+				Version:         1,
+				AccessKeyID:     "mock-access-key-id",
+				SecretAccessKey: "mock-secret-access-key",
+				SessionToken:    "mock-session-token",
+				Expiration:      time.Now().Add(1 * time.Hour).Format(time.RFC3339),
+			}, nil
+		}
+
+		integrationMetadata := IntegrationMetadata{
+			Name: dummyIntegration,
+			RolesAnywhereMetadata: RolesAnywhereMetadata{
+				ProfileARN:                    "my-profile-arn",
+				ProfileAcceptsRoleSessionName: true,
+				RoleARN:                       "arn:aws:iam::123456789012:role/role",
+				IdentityUsername:              "alice",
+			},
+		}
+		cfg, err := provider.GetConfig(ctx, dummyRegion,
+			WithCredentialsMaybeIntegration(integrationMetadata),
+			WithRolesAnywhereIntegrationClient(&fakeIntegrationClt, &mockCertificateGenerator{}, credentialGenerator),
+			WithSTSClientProvider(stsClt),
+		)
+		require.NoError(t, err)
+		creds, err := cfg.Credentials.Retrieve(ctx)
+		require.NoError(t, err)
+		require.Equal(t, "mock-access-key-id", creds.AccessKeyID)
+		require.Equal(t, "mock-secret-access-key", creds.SecretAccessKey)
+		require.Equal(t, "mock-session-token", creds.SessionToken)
+	})
+}
+
+type mockCertificateGenerator struct{}
+
+func (m *mockCertificateGenerator) GenerateCertificate(req tlsca.CertificateRequest) ([]byte, error) {
+	return []byte("fake-cert"), nil
 }
 
 func TestNewCacheKey(t *testing.T) {
@@ -275,12 +331,35 @@ func TestNewCacheKey(t *testing.T) {
 		{RoleARN: "roleA"},
 		{RoleARN: "roleB", ExternalID: "abc123", SessionName: "alice", Tags: map[string]string{"AKey": "AValue"}},
 	}
-	got, err := newCacheKey("integration-name", roleChain...)
-	require.NoError(t, err)
-	want := strings.TrimSpace(`
-{"integration":"integration-name","role_chain":[{"role_arn":"roleA"},{"role_arn":"roleB","external_id":"abc123","session_name":"alice","tags":{"AKey":"AValue"}}]}
+
+	t.Run("aws oidc integration", func(t *testing.T) {
+		t.Parallel()
+
+		got, err := newCacheKey("integration-name", RolesAnywhereMetadata{}, roleChain...)
+		require.NoError(t, err)
+		want := strings.TrimSpace(`
+{"integration":"integration-name","role_chain":[{"role_arn":"roleA"},{"role_arn":"roleB","external_id":"abc123","session_name":"alice","tags":{"AKey":"AValue"}}],"roles_anywhere_integration_metadata":{"ProfileARN":"","ProfileAcceptsRoleSessionName":false,"RoleARN":"","IdentityUsername":"","SessionDuration":0}}
 `)
-	require.Equal(t, want, got)
+		require.Equal(t, want, got)
+	})
+
+	t.Run("aws roles anywhere integration", func(t *testing.T) {
+		t.Parallel()
+		rolesAnywhereMetadata := RolesAnywhereMetadata{
+			ProfileARN:                    "my-profile-arn",
+			ProfileAcceptsRoleSessionName: true,
+			RoleARN:                       "arn:aws:iam::123456789012:role/role",
+			IdentityUsername:              "alice",
+			SessionDuration:               time.Hour,
+		}
+
+		got, err := newCacheKey("integration-name", rolesAnywhereMetadata, roleChain...)
+		require.NoError(t, err)
+		want := strings.TrimSpace(`
+{"integration":"integration-name","role_chain":[{"role_arn":"roleA"},{"role_arn":"roleB","external_id":"abc123","session_name":"alice","tags":{"AKey":"AValue"}}],"roles_anywhere_integration_metadata":{"ProfileARN":"my-profile-arn","ProfileAcceptsRoleSessionName":true,"RoleARN":"arn:aws:iam::123456789012:role/role","IdentityUsername":"alice","SessionDuration":3600000000000}}
+`)
+		require.Equal(t, want, got)
+	})
 }
 
 type fakeOIDCIntegrationClient struct {
@@ -302,4 +381,12 @@ func (f *fakeOIDCIntegrationClient) GenerateAWSOIDCToken(ctx context.Context, in
 		return "", trace.AccessDenied("unauthorized")
 	}
 	return f.getTokenFn(ctx, integrationName)
+}
+
+type fakeIntegrationGetter struct {
+	getIntegrationFn func(context.Context, string) (types.Integration, error)
+}
+
+func (f *fakeIntegrationGetter) GetIntegration(ctx context.Context, name string) (types.Integration, error) {
+	return f.getIntegrationFn(ctx, name)
 }
