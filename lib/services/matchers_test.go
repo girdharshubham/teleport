@@ -19,6 +19,8 @@
 package services
 
 import (
+	"fmt"
+	"slices"
 	"testing"
 
 	"github.com/google/uuid"
@@ -407,6 +409,82 @@ func TestMatchAndFilterKubeClusters(t *testing.T) {
 			tc.assertMatch(t, atLeastOneMatch)
 
 			require.Len(t, matchedServers, tc.expectedLen)
+		})
+	}
+}
+
+func TestMatchResourceByHealthStatus(t *testing.T) {
+	var dbServers []types.ResourceWithLabels
+
+	for i := 0; i < 10; i++ {
+		name := fmt.Sprintf("db-server-%d", i)
+		dbServer, err := types.NewDatabaseServerV3(types.Metadata{
+			Name: name,
+		}, types.DatabaseServerSpecV3{
+			HostID:   name,
+			Hostname: name,
+			Database: &types.DatabaseV3{
+				Metadata: types.Metadata{Name: "foo"},
+				Spec: types.DatabaseSpecV3{
+					URI:      "localhost:12345",
+					Protocol: "postgres",
+				},
+			},
+		})
+		require.NoError(t, err)
+		switch i % 3 {
+		case 0:
+			dbServer.SetTargetHealth(types.TargetHealth{
+				Status: string(types.TargetHealthStatusHealthy),
+			})
+		case 1:
+			dbServer.SetTargetHealth(types.TargetHealth{
+				Status:  string(types.TargetHealthStatusUnhealthy),
+				Message: string(types.TargetHealthStatusUnhealthy),
+			})
+		}
+		dbServers = append(dbServers, dbServer)
+	}
+
+	tests := []struct {
+		name             string
+		filterExpression string
+		matchedNames     []string
+	}{
+		{
+			name:             "health.status",
+			filterExpression: `health.status == "healthy"`,
+			matchedNames:     []string{"db-server-0", "db-server-3", "db-server-6", "db-server-9"},
+		},
+		{
+			name:             "health.message",
+			filterExpression: `health.message == "unhealthy"`,
+			matchedNames:     []string{"db-server-1", "db-server-4", "db-server-7"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			filterExpression, err := NewResourceExpression(test.filterExpression)
+			require.NoError(t, err)
+
+			filter := MatchResourceFilter{
+				ResourceKind:        types.KindDatabaseServer,
+				PredicateExpression: filterExpression,
+			}
+
+			var matched []types.ResourceWithLabels
+			for _, dbServer := range dbServers {
+				match, err := MatchResourceByFilters(dbServer, filter, nil)
+				require.NoError(t, err)
+				if match {
+					matched = append(matched, dbServer)
+				}
+			}
+			require.Equal(t,
+				test.matchedNames,
+				slices.Collect(types.ResourceNames(matched)),
+			)
 		})
 	}
 }

@@ -753,6 +753,15 @@ func NewResourceExpression(expression string) (typical.Expression[types.Resource
 				val, _ := r.GetLabel(key)
 				return val, nil
 			}),
+			"health.status": typical.DynamicVariable(func(r types.ResourceWithLabels) (string, error) {
+				type targetHealthGetter interface {
+					GetTargetHealth() types.TargetHealth
+				}
+				if h, ok := r.(targetHealthGetter); ok {
+					return h.GetTargetHealth().Status, nil
+				}
+				return string(types.TargetHealthStatusUnknown), nil
+			}),
 			"name": typical.DynamicVariable(func(r types.ResourceWithLabels) (string, error) {
 				// For nodes, the resource "name" that user expects is the
 				// nodes hostname, not its UUID. Currently, for other resources,
@@ -788,6 +797,16 @@ func NewResourceExpression(expression string) (typical.Expression[types.Resource
 			if fields[0] == ResourceIdentifier {
 				if f, err := predicate.GetFieldByTag(env, teleport.JSON, fields[1:]); err == nil {
 					return f, nil
+				}
+			}
+			if fields[0] == "health" {
+				type targetHealthGetter interface {
+					GetTargetHealth() types.TargetHealth
+				}
+				if h, ok := env.(targetHealthGetter); ok {
+					if f, err := predicate.GetFieldByTag(h.GetTargetHealth(), teleport.JSON, fields[1:]); err == nil {
+						return f, nil
+					}
 				}
 			}
 
