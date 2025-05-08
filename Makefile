@@ -1119,12 +1119,18 @@ run-etcd:
 #
 .PHONY: integration
 integration: FLAGS ?= -v -race
-integration: PACKAGES = $(shell go list ./... | grep 'integration\([^s]\|$$\)' | grep -v integrations/lib/testing/integration )
-integration:  $(TEST_LOG_DIR) ensure-gotestsum
+integration: PACKAGES_RACE PACKAGES_NORACE $(TEST_LOG_DIR) ensure-gotestsum
 	@echo KUBECONFIG is: $(KUBECONFIG), TEST_KUBE: $(TEST_KUBE)
-	$(CGOFLAG) go test -timeout 30m -json -tags "$(PAM_TAG) $(FIPS_TAG) $(BPF_TAG)" $(PACKAGES) $(FLAGS) \
-		| tee $(TEST_LOG_DIR)/integration.json \
+	$(CGOFLAG) go test -timeout 30m -json -tags "$(PAM_TAG) $(FIPS_TAG) $(BPF_TAG)" $(PACKAGES_RACE) $(FLAGS) \
+		| tee $(TEST_LOG_DIR)/integration_race.json \
 		| gotestsum --raw-command --format=testname -- cat
+	$(CGOFLAG) go test -timeout 30m -json -tags "$(PAM_TAG) $(FIPS_TAG) $(BPF_TAG)" $(PACKAGES_NORACE) -v \
+		| tee $(TEST_LOG_DIR)/integration_norace.json \
+		| gotestsum --raw-command --format=testname -- cat
+
+PACKAGES_ALL = $(shell go list ./... | grep 'integration\([^s]\|$$\)' | grep -v integrations/lib/testing/integration )
+PACKAGES_NORACE = $(filter %integration/autoupdate/tools, $(PACKAGES_ALL))
+PACKAGES_RACE = $(filter-out $(PACKAGES_NORACE), $(PACKAGES_ALL))
 
 #
 # Integration tests that run Kubernetes tests in order to complete successfully
