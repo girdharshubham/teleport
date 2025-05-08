@@ -26,7 +26,7 @@
 #include <string.h>
 
 char *CopyNSString(NSString *val) {
-  if (val) {
+  if (val && [val UTF8String]) {
     return strdup([val UTF8String]);
   }
   return strdup("");

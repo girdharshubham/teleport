@@ -47,7 +47,7 @@ NSString *VNEDaemonLabel(NSString *bundlePath) {
 }
 
 const char *VNECopyNSString(NSString *val) {
-  if (val) {
+  if (val && [val UTF8String]) {
     return strdup([val UTF8String]);
   }
   return strdup("");

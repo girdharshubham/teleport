@@ -22,7 +22,7 @@
 // TELCopyNSString converts and copies an Obj-C string to a C string which can be used with cgo.
 // The caller is expected to free the returned pointer.
 char *TELCopyNSString(NSString *val) {
-  if (val) {
+  if (val && [val UTF8String]) {
     return strdup([val UTF8String]);
   }
   return strdup("");
