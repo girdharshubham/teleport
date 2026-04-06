@@ -220,7 +220,7 @@ func (s *communityOIDCService) ValidateOIDCAuthCallback(ctx context.Context, q u
 	}
 
 	// Get the connector.
-	connector, err := s.getOIDCConnectorForRequest(ctx, *req)
+	connector, err := s.getOIDCConnector(ctx, *req)
 	if err != nil {
 		return nil, trace.Wrap(err)
 	}
@@ -382,24 +382,6 @@ func (s *communityOIDCService) ValidateOIDCAuthCallback(ctx context.Context, q u
 // getOIDCConnector retrieves the OIDC connector for the given request,
 // using the embedded connector spec for test/SSOTestFlow if available.
 func (s *communityOIDCService) getOIDCConnector(ctx context.Context, req types.OIDCAuthRequest) (types.OIDCConnector, error) {
-	if req.SSOTestFlow && req.ConnectorSpec != nil {
-		connector, err := types.NewOIDCConnector(req.ConnectorID, *req.ConnectorSpec)
-		if err != nil {
-			return nil, trace.Wrap(err)
-		}
-		return connector, nil
-	}
-
-	connector, err := s.a.GetOIDCConnector(ctx, req.ConnectorID, true)
-	if err != nil {
-		return nil, trace.Wrap(err)
-	}
-	return connector, nil
-}
-
-// getOIDCConnectorForRequest retrieves the OIDC connector for callback
-// validation.
-func (s *communityOIDCService) getOIDCConnectorForRequest(ctx context.Context, req types.OIDCAuthRequest) (types.OIDCConnector, error) {
 	if req.SSOTestFlow && req.ConnectorSpec != nil {
 		connector, err := types.NewOIDCConnector(req.ConnectorID, *req.ConnectorSpec)
 		if err != nil {
