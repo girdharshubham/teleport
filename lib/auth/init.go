@@ -479,6 +479,15 @@ func Init(ctx context.Context, cfg InitConfig, opts ...ServerOption) (*Server, e
 		return nil, trace.Wrap(err)
 	}
 
+	// Register community OIDC and SAML services if no enterprise service has
+	// been set. This enables OIDC/SAML authentication in community builds.
+	if asrv.oidcAuthService == nil {
+		asrv.SetOIDCService(NewCommunityOIDCService(asrv))
+	}
+	if asrv.samlAuthService == nil {
+		asrv.SetSAMLService(NewCommunitySAMLService(asrv))
+	}
+
 	domainName := cfg.ClusterName.GetClusterName()
 	if err := backend.RunWhileLocked(ctx,
 		backend.RunWhileLockedConfig{

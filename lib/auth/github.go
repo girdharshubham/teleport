@@ -45,7 +45,6 @@ import (
 	"github.com/gravitational/teleport/lib/defaults"
 	"github.com/gravitational/teleport/lib/events"
 	"github.com/gravitational/teleport/lib/loginrule"
-	"github.com/gravitational/teleport/lib/modules"
 	"github.com/gravitational/teleport/lib/services"
 	"github.com/gravitational/teleport/lib/utils"
 )
@@ -269,61 +268,10 @@ type httpRequester interface {
 // If userTeams is not nil, only organizations that are both specified
 // in conn and in userTeams will be checked. If client is nil a
 // net/http.Client will be used.
+//
+// Note: This check has been relaxed to allow GitHub organizations with
+// external SSO to authenticate in all build types, not just Enterprise.
 func checkGithubOrgSSOSupport(ctx context.Context, conn types.GithubConnector, userTeams []GithubTeamResponse, orgCache *utils.FnCache, client httpRequester) error {
-	version := modules.GetModules().BuildType()
-	if version == modules.BuildEnterprise {
-		return nil
-	}
-
-	orgs := make(map[string]struct{})
-	addOrg := func(org string) {
-		if len(userTeams) != 0 {
-			// Only check organizations that the user is a member of and
-			// that are specified in this auth connector
-			for _, team := range userTeams {
-				if org == team.Org.Login {
-					orgs[org] = struct{}{}
-				}
-			}
-		} else {
-			orgs[org] = struct{}{}
-		}
-	}
-
-	// Check each organization only once
-	// TODO: this can be removed as of Teleport 12, but we should create cluster
-	// alerts for anyone using the old teams_to_logins field to avoid breaking anyone
-	for _, mapping := range conn.GetTeamsToLogins() {
-		addOrg(mapping.Organization)
-	}
-	for _, mapping := range conn.GetTeamsToRoles() {
-		addOrg(mapping.Organization)
-	}
-
-	if client == nil {
-		var err error
-		client, err = defaults.HTTPClient()
-		if err != nil {
-			return trace.Wrap(err)
-		}
-	}
-
-	for org := range orgs {
-		usesSSO, err := utils.FnCacheGet(ctx, orgCache, org, func(ctx context.Context) (bool, error) {
-			return orgUsesExternalSSO(ctx, conn.GetEndpointURL(), org, client)
-		})
-		if err != nil {
-			return trace.Wrap(err)
-		}
-
-		if usesSSO {
-			return trace.AccessDenied(
-				"GitHub organization %s uses external SSO, please purchase a Teleport Enterprise license if you want to authenticate with this organization",
-				org,
-			)
-		}
-	}
-
 	return nil
 }
 

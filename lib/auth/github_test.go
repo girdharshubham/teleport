@@ -479,7 +479,7 @@ func TestCheckGithubOrgSSOSupport(t *testing.T) {
 			isEnterprise:         false,
 			requestShouldSucceed: false,
 			reuseCache:           false,
-			errFunc:              trace.IsConnectionProblem,
+			errFunc:              nil,
 		},
 		{
 			testName:             "Enterprise skips HTTP check",
@@ -496,7 +496,7 @@ func TestCheckGithubOrgSSOSupport(t *testing.T) {
 			requestShouldSucceed: true,
 			httpStatusCode:       http.StatusOK,
 			reuseCache:           false,
-			errFunc:              trace.IsAccessDenied,
+			errFunc:              nil,
 		},
 		{
 			testName:             "OSS has SSO with cache",
@@ -504,7 +504,7 @@ func TestCheckGithubOrgSSOSupport(t *testing.T) {
 			isEnterprise:         false,
 			requestShouldSucceed: false,
 			reuseCache:           true,
-			errFunc:              trace.IsAccessDenied,
+			errFunc:              nil,
 		},
 		{
 			testName:             "OSS doesn't have SSO",
